@@ -7,573 +7,369 @@
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&family=Nunito:wght@400;500;600;700&display=swap" rel="stylesheet" />
 <style>
   :root {
-    --gold: #C89B14;
-    --gold-light: #E8B91A;
-    --gold-dark: #A07A0A;
-    --blue: #1A3E8C;
-    --blue-light: #2551B5;
-    --blue-dark: #0F2560;
-    --bg-light: #F5F7FA;
-    --bg-white: #FFFFFF;
-    --bg-dark: #0F1020;
-    --text-dark: #1A1A2E;
-    --text-mid: #444466;
-    --text-light: #FFFFFF;
-    --green: #1A6B3C;
-    --green-light: #2E9B5A;
-    --red: #C0392B;
-    --amber: #C05020;
-    --amber-dark: #7A2A0A;
-    --radius: 16px;
-    --shadow: 0 8px 32px rgba(26,62,140,0.13);
+    --gold:#C89B14;--gold-light:#E8B91A;--gold-dark:#A07A0A;
+    --blue:#1A3E8C;--blue-light:#2551B5;--blue-dark:#0F2560;
+    --bg-light:#F5F7FA;--text-dark:#1A1A2E;--text-mid:#444466;
+    --green:#1A6B3C;--green-light:#2E9B5A;--red:#C0392B;
+    --amber:#C05020;--purple:#5A2D82;--purple-light:#7B3FB0;
   }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Nunito',sans-serif;background:var(--bg-light);min-height:100vh;color:var(--text-dark);overflow-x:hidden;}
+  h1,h2,h3,h4,.poppins{font-family:'Poppins',sans-serif;}
 
-  * { box-sizing: border-box; margin: 0; padding: 0; }
+  /* SPLASH */
+  #splash{position:fixed;inset:0;z-index:1000;background:linear-gradient(160deg,var(--blue-dark) 0%,var(--blue) 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;overflow:hidden;}
+  #splash.fade-out{animation:splashFadeOut 0.4s ease forwards;}
+  @keyframes splashFadeOut{to{opacity:0;pointer-events:none;}}
+  .splash-atom{position:relative;width:140px;height:140px;display:flex;align-items:center;justify-content:center;opacity:0;animation:atomIn 0.6s 0.1s ease forwards;}
+  @keyframes atomIn{from{opacity:0;transform:scale(0.3)}to{opacity:1;transform:scale(1)}}
+  .atom-nucleus{width:32px;height:32px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#FFD700,var(--gold));box-shadow:0 0 24px 8px rgba(200,155,20,0.7);position:absolute;z-index:2;animation:nucGlow 1.5s 2s ease-in-out infinite alternate;}
+  @keyframes nucGlow{from{box-shadow:0 0 24px 8px rgba(200,155,20,0.7)}to{box-shadow:0 0 48px 16px rgba(200,155,20,1)}}
+  .orbit{position:absolute;border-radius:50%;border:2.5px solid rgba(200,155,20,0);animation:orbitDraw 0.6s ease forwards;}
+  .orbit-1{width:110px;height:42px;transform:rotate(0deg);animation-delay:0.5s}
+  .orbit-2{width:110px;height:42px;transform:rotate(60deg);animation-delay:0.7s}
+  .orbit-3{width:110px;height:42px;transform:rotate(120deg);animation-delay:0.9s}
+  @keyframes orbitDraw{from{border-color:rgba(200,155,20,0)}to{border-color:rgba(200,155,20,0.85)}}
+  .electron{position:absolute;width:8px;height:8px;border-radius:50%;background:var(--gold-light);box-shadow:0 0 8px 3px var(--gold);}
+  .orbit-1 .electron{animation:spin1 2.4s 1.1s linear infinite}
+  .orbit-2 .electron{animation:spin1 2.1s 1.3s linear infinite reverse}
+  .orbit-3 .electron{animation:spin1 1.9s 1.5s linear infinite}
+  @keyframes spin1{from{transform:translate(51px,-4px) rotate(0deg) translateX(-51px)}to{transform:translate(51px,-4px) rotate(360deg) translateX(-51px)}}
+  .benzene-left,.benzene-right{position:absolute;opacity:0;}
+  .benzene-left{left:-60px;animation:benzIn 0.5s 0.9s ease forwards}
+  .benzene-right{right:-60px;animation:benzInR 0.5s 1.1s ease forwards}
+  @keyframes benzIn{from{opacity:0;transform:translateX(-40px)}to{opacity:0.5;transform:translateX(0)}}
+  @keyframes benzInR{from{opacity:0;transform:translateX(40px)}to{opacity:0.5;transform:translateX(0)}}
+  .splash-title{opacity:0;text-align:center;animation:textUp 0.5s 1.5s ease forwards;font-family:'Poppins',sans-serif;font-weight:800;font-size:1.55rem;color:#fff;letter-spacing:0.08em;text-shadow:0 2px 16px rgba(200,155,20,0.3);}
+  .splash-institute{font-size:0.7rem;letter-spacing:0.22em;color:var(--gold-light);font-weight:600;margin-top:2px;display:block;}
+  @keyframes textUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+  .splash-tagline{opacity:0;animation:textUp 0.5s 2.1s ease forwards;font-family:'Nunito',sans-serif;color:rgba(255,255,255,0.7);font-size:0.95rem;font-style:italic;}
+  .tagline-dot{color:var(--gold);font-style:normal;}
 
-  body {
-    font-family: 'Nunito', sans-serif;
-    background: var(--bg-light);
-    min-height: 100vh;
-    color: var(--text-dark);
-    overflow-x: hidden;
-  }
+  /* APP */
+  #app{display:none;min-height:100vh;flex-direction:column;}
+  #app.visible{display:flex;animation:appFadeIn 0.4s ease;}
+  @keyframes appFadeIn{from{opacity:0}to{opacity:1}}
 
-  h1, h2, h3, h4, .poppins { font-family: 'Poppins', sans-serif; }
+  /* HEADER */
+  .header{background:#fff;border-bottom:2px solid rgba(200,155,20,0.13);padding:12px 20px;display:flex;align-items:center;gap:12px;box-shadow:0 2px 12px rgba(26,62,140,0.07);position:sticky;top:0;z-index:100;}
+  .logo-icon{width:38px;height:38px;background:linear-gradient(135deg,var(--blue-dark),var(--blue));border-radius:10px;display:flex;align-items:center;justify-content:center;}
+  .logo-text{font-family:'Poppins',sans-serif;font-weight:700;font-size:0.8rem;color:var(--blue);line-height:1.2;}
+  .logo-text span{color:var(--gold);display:block;font-size:0.65rem;font-weight:600;}
+  .header-right{margin-left:auto;display:flex;align-items:center;gap:8px;}
+  .header-greeting{font-size:0.82rem;color:var(--text-mid);font-weight:600;}
+  .user-btn{background:linear-gradient(135deg,var(--blue-dark),var(--blue));color:#fff;border:none;padding:6px 12px;border-radius:8px;font-family:'Poppins',sans-serif;font-weight:600;font-size:0.75rem;cursor:pointer;transition:all 0.15s;}
+  .user-btn:hover{transform:scale(1.04);}
 
-  /* ================= SPLASH ================= */
-  #splash {
-    position: fixed; inset: 0; z-index: 1000;
-    background: linear-gradient(160deg, var(--blue-dark) 0%, var(--blue) 100%);
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
-    gap: 18px; overflow: hidden;
-  }
-  #splash.fade-out {
-    animation: splashFadeOut 0.4s ease forwards;
-  }
-  @keyframes splashFadeOut {
-    to { opacity: 0; pointer-events: none; }
-  }
+  /* SCREENS */
+  .screen{display:none;flex-direction:column;flex:1;}
+  .screen.active{display:flex;}
 
-  .splash-atom {
-    position: relative; width: 140px; height: 140px;
-    display: flex; align-items: center; justify-content: center;
-    opacity: 0;
-    animation: atomIn 0.6s 0.1s ease forwards;
-  }
-  @keyframes atomIn {
-    from { opacity:0; transform: scale(0.3); }
-    to   { opacity:1; transform: scale(1); }
-  }
+  /* HOME */
+  .home-hero{padding:28px 20px 12px;text-align:center;}
+  .home-hero h1{font-size:clamp(1.2rem,5vw,1.8rem);color:var(--blue);line-height:1.3;margin-bottom:8px;}
+  .home-hero p{color:var(--text-mid);font-size:0.9rem;}
+  .subject-grid{padding:12px 16px 8px;display:flex;flex-direction:column;gap:12px;}
+  @media(min-width:560px){.subject-grid{flex-direction:row;flex-wrap:wrap;justify-content:center;}.subject-card{flex:1;min-width:140px;max-width:195px;}}
+  .subject-card{border-radius:18px;padding:20px 16px;cursor:pointer;color:#fff;box-shadow:0 6px 28px rgba(0,0,0,0.18);transition:transform 0.18s,box-shadow 0.18s;position:relative;overflow:hidden;display:flex;flex-direction:column;gap:7px;}
+  .subject-card:hover{transform:translateY(-4px) scale(1.02);box-shadow:0 12px 40px rgba(0,0,0,0.22);}
+  .subject-card:active{transform:scale(0.97);}
+  .subject-card::before{content:'';position:absolute;inset:0;background:rgba(255,255,255,0.05);border-radius:inherit;}
+  .card-physics{background:linear-gradient(135deg,#1A3E8C,#2551B5);}
+  .card-biology{background:linear-gradient(135deg,#1A6B3C,#2E9B5A);}
+  .card-chemistry{background:linear-gradient(135deg,#7A2A0A,#C05020);}
+  .card-lb{background:linear-gradient(135deg,#5A2D82,#8B5CF6);}
+  .card-ana{background:linear-gradient(135deg,#0F2560,#1A3E8C);}
+  .card-icon{font-size:2rem;line-height:1;}
+  .card-name{font-family:'Poppins',sans-serif;font-weight:700;font-size:1.1rem;}
+  .card-meta{font-size:0.78rem;opacity:0.85;}
 
-  .atom-nucleus {
-    width: 32px; height: 32px; border-radius: 50%;
-    background: radial-gradient(circle at 35% 35%, #FFD700, var(--gold));
-    box-shadow: 0 0 24px 8px rgba(200,155,20,0.7);
-    position: absolute; z-index: 2;
-    animation: nucGlow 1.5s 2s ease-in-out infinite alternate;
-  }
-  @keyframes nucGlow {
-    from { box-shadow: 0 0 24px 8px rgba(200,155,20,0.7); }
-    to   { box-shadow: 0 0 48px 16px rgba(200,155,20,1); }
-  }
+  /* TOPIC */
+  .topic-header{background:linear-gradient(135deg,var(--blue-dark),var(--blue));padding:14px 16px;display:flex;align-items:center;gap:12px;color:#fff;}
+  .topic-header-title{font-family:'Poppins',sans-serif;font-weight:700;font-size:1.15rem;flex:1;}
+  .back-btn{background:rgba(255,255,255,0.15);border:none;color:#fff;padding:6px 12px;border-radius:8px;cursor:pointer;font-size:1rem;display:flex;align-items:center;gap:4px;font-family:'Nunito',sans-serif;font-weight:600;transition:background 0.15s;white-space:nowrap;}
+  .back-btn:hover{background:rgba(255,255,255,0.25);}
+  .tab-bar{display:flex;background:#fff;border-bottom:2px solid rgba(26,62,140,0.1);}
+  .tab-btn{flex:1;padding:11px;border:none;background:none;font-family:'Poppins',sans-serif;font-weight:600;font-size:0.9rem;color:var(--text-mid);cursor:pointer;border-bottom:3px solid transparent;transition:all 0.18s;}
+  .tab-btn.active{color:var(--blue);border-bottom-color:var(--gold);background:rgba(200,155,20,0.05);}
+  .chapter-list{flex:1;overflow-y:auto;padding:12px 14px;display:flex;flex-direction:column;gap:10px;}
+  .chapter-card{background:#fff;border-radius:14px;padding:14px 16px;box-shadow:0 2px 10px rgba(26,62,140,0.07);display:flex;align-items:center;gap:12px;border-left:5px solid var(--blue);transition:box-shadow 0.15s,transform 0.15s;}
+  .chapter-card:hover{box-shadow:0 5px 20px rgba(26,62,140,0.13);transform:translateX(2px);}
+  .chapter-num{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--blue-dark),var(--blue));color:#fff;font-family:'Poppins',sans-serif;font-weight:700;font-size:0.85rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .chapter-info{flex:1;min-width:0;}
+  .chapter-name{font-family:'Poppins',sans-serif;font-weight:600;font-size:0.9rem;color:var(--text-dark);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .chapter-sub{font-size:0.75rem;color:var(--text-mid);margin-top:2px;}
+  .progress-bar-wrap{height:5px;background:#eee;border-radius:99px;margin-top:6px;}
+  .progress-bar-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--gold),var(--gold-light));transition:width 0.3s;}
+  .start-btn{background:linear-gradient(135deg,var(--gold-dark),var(--gold));color:#fff;border:none;padding:8px 16px;border-radius:10px;font-family:'Poppins',sans-serif;font-weight:700;font-size:0.85rem;cursor:pointer;white-space:nowrap;box-shadow:0 3px 12px rgba(200,155,20,0.35);transition:all 0.15s;}
+  .start-btn:hover{transform:scale(1.05);}
 
-  .orbit {
-    position: absolute; border-radius: 50%;
-    border: 2.5px solid rgba(200,155,20,0.0);
-    animation: orbitDraw 0.6s ease forwards;
-  }
-  .orbit-1 { width:110px; height:42px; transform: rotate(0deg);   animation-delay:0.5s; }
-  .orbit-2 { width:110px; height:42px; transform: rotate(60deg);  animation-delay:0.7s; }
-  .orbit-3 { width:110px; height:42px; transform: rotate(120deg); animation-delay:0.9s; }
-  @keyframes orbitDraw {
-    from { border-color: rgba(200,155,20,0); }
-    to   { border-color: rgba(200,155,20,0.85); }
-  }
+  /* LEVEL MODAL */
+  .modal-overlay{position:fixed;inset:0;z-index:300;background:rgba(0,0,0,0.6);display:flex;align-items:flex-end;justify-content:center;}
+  .bottom-sheet{background:#fff;border-radius:24px 24px 0 0;padding:24px 20px 32px;width:100%;max-width:480px;animation:slideUp 0.3s ease;}
+  @keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+  .sheet-title{font-family:'Poppins',sans-serif;font-weight:800;font-size:1.1rem;color:var(--blue);text-align:center;margin-bottom:4px;}
+  .sheet-sub{text-align:center;font-size:0.83rem;color:var(--text-mid);margin-bottom:18px;}
+  .level-cards{display:flex;flex-direction:column;gap:11px;}
+  .level-card{border-radius:14px;padding:15px 17px;cursor:pointer;border:2.5px solid transparent;display:flex;align-items:center;gap:14px;transition:all 0.18s;}
+  .level-card:hover{transform:translateX(4px);}
+  .level-basic{background:rgba(46,155,90,0.06);border-color:rgba(46,155,90,0.2);}
+  .level-basic:hover{border-color:var(--green-light);}
+  .level-inter{background:rgba(200,155,20,0.06);border-color:rgba(200,155,20,0.2);}
+  .level-inter:hover{border-color:var(--gold);}
+  .level-adv{background:rgba(192,57,43,0.06);border-color:rgba(192,57,43,0.2);}
+  .level-adv:hover{border-color:var(--red);}
+  .level-icon{font-size:1.9rem;flex-shrink:0;}
+  .level-name{font-family:'Poppins',sans-serif;font-weight:700;font-size:0.97rem;}
+  .level-basic .level-name{color:var(--green);}
+  .level-inter .level-name{color:var(--gold-dark);}
+  .level-adv .level-name{color:var(--red);}
+  .level-desc{font-size:0.78rem;color:var(--text-mid);margin-top:2px;}
+  .sheet-cancel{width:100%;margin-top:13px;padding:12px;border:none;background:#f5f5f5;border-radius:12px;font-family:'Poppins',sans-serif;font-weight:600;font-size:0.9rem;color:var(--text-mid);cursor:pointer;}
 
-  .electron {
-    position: absolute; width: 8px; height: 8px; border-radius: 50%;
-    background: var(--gold-light);
-    box-shadow: 0 0 8px 3px var(--gold);
-  }
-  .orbit-1 .electron { animation: spin1 2.4s 1.1s linear infinite; }
-  .orbit-2 .electron { animation: spin1 2.1s 1.3s linear infinite reverse; }
-  .orbit-3 .electron { animation: spin1 1.9s 1.5s linear infinite; }
-  @keyframes spin1 {
-    from { transform: translate(51px, -4px) rotate(0deg) translateX(-51px); }
-    to   { transform: translate(51px, -4px) rotate(360deg) translateX(-51px); }
-  }
+  /* LOADING */
+  .loading-screen{background:#0F1020;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;flex:1;}
+  .spinner{width:56px;height:56px;border-radius:50%;border:4px solid rgba(200,155,20,0.15);border-top-color:var(--gold);animation:spin 0.9s linear infinite;}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .loading-badge{padding:5px 16px;border-radius:99px;background:rgba(200,155,20,0.15);border:1px solid rgba(200,155,20,0.3);color:var(--gold);font-family:'Poppins',sans-serif;font-weight:700;font-size:0.8rem;}
+  .loading-text{font-family:'Poppins',sans-serif;font-weight:600;color:rgba(255,255,255,0.8);font-size:1rem;text-align:center;}
+  .loading-sub{font-size:0.78rem;color:rgba(255,255,255,0.35);margin-top:-12px;text-align:center;}
 
-  .benzene-left, .benzene-right {
-    position: absolute; opacity: 0;
-  }
-  .benzene-left  { left: -60px; animation: benzIn 0.5s 0.9s ease forwards; }
-  .benzene-right { right: -60px; animation: benzInR 0.5s 1.1s ease forwards; }
-  @keyframes benzIn  { from{opacity:0;transform:translateX(-40px)} to{opacity:0.5;transform:translateX(0)} }
-  @keyframes benzInR { from{opacity:0;transform:translateX(40px)}  to{opacity:0.5;transform:translateX(0)} }
+  /* QUIZ */
+  .quiz-screen{background:#0F1020;}
+  .quiz-topbar{background:#16192E;padding:12px 16px;display:flex;align-items:center;gap:10px;border-bottom:1px solid rgba(200,155,20,0.15);}
+  .quiz-title{flex:1;text-align:center;font-family:'Poppins',sans-serif;font-weight:600;color:#fff;font-size:0.9rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .score-pill{background:linear-gradient(135deg,var(--gold-dark),var(--gold));color:#fff;padding:5px 14px;border-radius:99px;font-family:'Poppins',sans-serif;font-weight:700;font-size:0.9rem;white-space:nowrap;box-shadow:0 2px 10px rgba(200,155,20,0.4);}
+  .score-pill.pop{animation:scorePop 0.35s ease;}
+  .score-pill.shake{animation:scoreShake 0.4s ease;}
+  @keyframes scorePop{0%{transform:scale(1)}40%{transform:scale(1.25)}70%{transform:scale(0.95)}100%{transform:scale(1)}}
+  @keyframes scoreShake{0%,100%{transform:translateX(0)}20%{transform:translateX(-6px)}40%{transform:translateX(6px)}60%{transform:translateX(-4px)}80%{transform:translateX(4px)}}
+  .level-pill{padding:3px 10px;border-radius:99px;font-family:'Poppins',sans-serif;font-weight:700;font-size:0.72rem;}
+  .pill-basic{background:rgba(46,155,90,0.2);color:#6EE7B7;}
+  .pill-inter{background:rgba(200,155,20,0.2);color:var(--gold);}
+  .pill-adv{background:rgba(192,57,43,0.2);color:#ff6b6b;}
+  .quiz-progress-wrap{background:#16192E;padding:8px 16px 12px;}
+  .quiz-progress-bar{height:6px;background:rgba(255,255,255,0.1);border-radius:99px;overflow:hidden;}
+  .quiz-progress-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--gold),#FFD700);transition:width 0.4s ease;}
+  .quiz-counter{font-size:0.78rem;color:rgba(255,255,255,0.5);margin-top:5px;text-align:right;}
+  .quiz-content{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:14px;}
+  .question-card{background:#1E2240;border-radius:18px;padding:20px 18px;box-shadow:0 4px 24px rgba(0,0,0,0.4);border:1px solid rgba(200,155,20,0.12);animation:qCardIn 0.3s ease;}
+  @keyframes qCardIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+  .q-num{font-size:0.75rem;color:var(--gold);font-weight:700;letter-spacing:0.08em;margin-bottom:10px;}
+  .q-text{color:#fff;font-size:1rem;line-height:1.65;}
+  .options-list{display:flex;flex-direction:column;gap:10px;}
+  .opt-btn{background:#1E2240;border:2px solid rgba(255,255,255,0.1);border-radius:13px;padding:13px 16px;display:flex;align-items:flex-start;gap:12px;cursor:pointer;text-align:left;transition:border-color 0.15s,background 0.15s,transform 0.1s;animation:optIn 0.25s ease backwards;width:100%;}
+  .opt-btn:nth-child(1){animation-delay:0.05s}.opt-btn:nth-child(2){animation-delay:0.1s}.opt-btn:nth-child(3){animation-delay:0.15s}.opt-btn:nth-child(4){animation-delay:0.2s}
+  @keyframes optIn{from{opacity:0;transform:translateX(-10px)}to{opacity:1;transform:translateX(0)}}
+  .opt-btn:hover:not(:disabled){border-color:var(--gold);background:rgba(200,155,20,0.07);transform:translateX(3px);}
+  .opt-btn:disabled{cursor:default;}
+  .opt-letter{width:28px;height:28px;border-radius:8px;background:rgba(255,255,255,0.08);color:var(--gold);font-family:'Poppins',sans-serif;font-weight:700;font-size:0.82rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .opt-text{color:rgba(255,255,255,0.9);font-size:0.93rem;line-height:1.5;padding-top:4px;}
+  .opt-btn.correct{border-color:var(--green-light);background:rgba(46,155,90,0.15);}
+  .opt-btn.correct .opt-letter{background:var(--green-light);color:#fff;}
+  .opt-btn.wrong{border-color:var(--red);background:rgba(192,57,43,0.15);}
+  .opt-btn.wrong .opt-letter{background:var(--red);color:#fff;}
+  .opt-btn.revealed{border-color:var(--green-light);background:rgba(46,155,90,0.08);opacity:0.7;}
+  .opt-btn.revealed .opt-letter{background:var(--green-light);color:#fff;}
+  .feedback{display:flex;align-items:center;justify-content:center;gap:8px;padding:10px;border-radius:10px;font-family:'Poppins',sans-serif;font-weight:700;font-size:0.9rem;animation:feedIn 0.25s ease;}
+  @keyframes feedIn{from{opacity:0;transform:scale(0.9)}to{opacity:1;transform:scale(1)}}
+  .feedback.correct{background:rgba(46,155,90,0.2);color:var(--green-light);}
+  .feedback.wrong{background:rgba(192,57,43,0.2);color:#ff6b6b;}
+  .expl-box{background:#1E2240;border-radius:12px;padding:12px 14px;border-left:3px solid var(--gold);}
+  .expl-label{font-size:0.72rem;font-weight:700;color:var(--gold);margin-bottom:6px;}
+  .expl-text{color:rgba(255,255,255,0.85);font-size:0.88rem;line-height:1.55;}
+  .next-btn{background:linear-gradient(135deg,var(--gold-dark),var(--gold));color:#fff;border:none;padding:14px;border-radius:14px;font-family:'Poppins',sans-serif;font-weight:700;font-size:1rem;cursor:pointer;box-shadow:0 4px 20px rgba(200,155,20,0.4);transition:all 0.15s;animation:nextIn 0.3s ease;display:flex;align-items:center;justify-content:center;gap:8px;width:100%;}
+  @keyframes nextIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+  .next-btn:hover{transform:translateY(-2px);}
 
-  .splash-title {
-    opacity: 0; text-align: center;
-    animation: textUp 0.5s 1.5s ease forwards;
-    font-family: 'Poppins', sans-serif;
-    font-weight: 800; font-size: 1.55rem;
-    color: #fff; letter-spacing: 0.08em;
-    text-shadow: 0 2px 16px rgba(200,155,20,0.3);
-  }
-  .splash-institute {
-    font-size: 0.7rem; letter-spacing: 0.22em;
-    color: var(--gold-light); font-weight: 600;
-    margin-top: 2px; display:block;
-  }
-  @keyframes textUp {
-    from { opacity:0; transform: translateY(18px); }
-    to   { opacity:1; transform: translateY(0); }
-  }
+  /* RESULTS */
+  .results-screen{background:linear-gradient(160deg,var(--blue-dark) 0%,#0F1020 100%);}
+  .results-content{flex:1;overflow-y:auto;padding:20px 16px;display:flex;flex-direction:column;gap:18px;align-items:center;}
+  .score-ring-wrap{width:160px;height:160px;border-radius:50%;border:8px solid rgba(200,155,20,0.2);display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;box-shadow:0 0 40px rgba(200,155,20,0.3);animation:ringIn 0.5s ease;}
+  @keyframes ringIn{from{opacity:0;transform:scale(0.5)}to{opacity:1;transform:scale(1)}}
+  .score-ring-svg{position:absolute;inset:-8px;}
+  .score-big{font-family:'Poppins',sans-serif;font-weight:900;font-size:2.8rem;color:var(--gold);line-height:1;}
+  .score-lbl{font-size:0.78rem;color:rgba(255,255,255,0.6);font-weight:600;}
+  .perf-badge{padding:8px 24px;border-radius:99px;font-family:'Poppins',sans-serif;font-weight:700;font-size:1rem;animation:badgeIn 0.4s 0.3s ease backwards;box-shadow:0 4px 20px rgba(0,0,0,0.3);}
+  @keyframes badgeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+  .perf-excellent{background:linear-gradient(135deg,#1A6B3C,#2E9B5A);color:#fff;}
+  .perf-good{background:linear-gradient(135deg,var(--gold-dark),var(--gold));color:#fff;}
+  .perf-practice{background:linear-gradient(135deg,var(--blue-dark),var(--blue));color:#fff;}
+  .stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;width:100%;animation:statsIn 0.4s 0.5s ease backwards;}
+  @keyframes statsIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+  .stat-box{background:rgba(255,255,255,0.07);border-radius:14px;padding:14px;text-align:center;border:1px solid rgba(255,255,255,0.08);}
+  .stat-val{font-family:'Poppins',sans-serif;font-weight:800;font-size:1.6rem;color:#fff;}
+  .stat-lbl{font-size:0.75rem;color:rgba(255,255,255,0.55);margin-top:2px;}
+  .stat-box.g .stat-val{color:var(--green-light);}
+  .stat-box.r .stat-val{color:#ff6b6b;}
+  .stat-box.gold .stat-val{color:var(--gold);}
+  .neet-box{background:linear-gradient(135deg,rgba(200,155,20,0.2),rgba(200,155,20,0.08));border:2px solid rgba(200,155,20,0.35);border-radius:16px;padding:16px;width:100%;text-align:center;animation:statsIn 0.4s 0.7s ease backwards;}
+  .neet-lbl{color:rgba(255,255,255,0.7);font-size:0.8rem;margin-bottom:5px;}
+  .neet-val{font-family:'Poppins',sans-serif;font-weight:900;font-size:2.2rem;color:var(--gold);}
+  .neet-max{font-size:0.8rem;color:rgba(255,255,255,0.5);}
+  .save-status{font-size:0.78rem;color:rgba(255,255,255,0.5);text-align:center;animation:statsIn 0.4s 0.9s ease backwards;}
+  .result-btns{display:flex;flex-direction:column;gap:10px;width:100%;animation:statsIn 0.4s 1.1s ease backwards;}
+  .result-btn{padding:14px;border-radius:14px;border:none;font-family:'Poppins',sans-serif;font-weight:700;font-size:0.95rem;cursor:pointer;transition:all 0.15s;}
+  .result-btn.primary{background:linear-gradient(135deg,var(--gold-dark),var(--gold));color:#fff;box-shadow:0 4px 20px rgba(200,155,20,0.4);}
+  .result-btn.secondary{background:rgba(255,255,255,0.1);color:#fff;border:1px solid rgba(255,255,255,0.15);}
+  .result-btn:hover{transform:translateY(-2px);}
 
-  .splash-tagline {
-    opacity: 0;
-    animation: textUp 0.5s 2.1s ease forwards;
-    font-family: 'Nunito', sans-serif;
-    color: rgba(255,255,255,0.7);
-    font-size: 0.95rem; font-style: italic;
-    letter-spacing: 0.04em;
-  }
-  .tagline-dot { color: var(--gold); font-style: normal; }
+  /* REVIEW */
+  .review-header{background:linear-gradient(135deg,var(--blue-dark),var(--blue));padding:14px 16px;display:flex;align-items:center;gap:12px;color:#fff;}
+  .review-list{flex:1;overflow-y:auto;padding:12px;display:flex;flex-direction:column;gap:14px;}
+  .review-card{background:#fff;border-radius:16px;padding:16px;box-shadow:0 2px 12px rgba(26,62,140,0.1);}
+  .review-card.rc-c{border-left:5px solid var(--green-light);}
+  .review-card.rc-w{border-left:5px solid var(--red);}
+  .review-card.rc-s{border-left:5px solid #aaa;}
+  .rc-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;gap:8px;}
+  .rc-qnum{font-family:'Poppins',sans-serif;font-weight:700;font-size:0.8rem;color:var(--blue);}
+  .rc-badge{padding:2px 10px;border-radius:99px;font-size:0.72rem;font-weight:700;}
+  .rc-badge.c{background:rgba(46,155,90,0.15);color:var(--green);}
+  .rc-badge.w{background:rgba(192,57,43,0.12);color:var(--red);}
+  .rc-badge.s{background:rgba(0,0,0,0.06);color:#666;}
+  .rc-q{font-size:0.92rem;color:var(--text-dark);line-height:1.6;margin-bottom:12px;}
+  .rc-opts{display:flex;flex-direction:column;gap:6px;margin-bottom:10px;}
+  .rc-opt{padding:8px 12px;border-radius:9px;font-size:0.85rem;display:flex;align-items:flex-start;gap:8px;border:1.5px solid #eee;color:var(--text-dark);}
+  .rc-opt b{flex-shrink:0;}
+  .rc-opt.ic{background:rgba(46,155,90,0.1);border-color:var(--green-light);color:var(--green);}
+  .rc-opt.iw{background:rgba(192,57,43,0.1);border-color:var(--red);color:var(--red);}
+  .rc-expl{background:rgba(26,62,140,0.05);border-radius:9px;padding:9px 12px;font-size:0.82rem;color:var(--text-mid);border-left:3px solid var(--gold);line-height:1.55;}
+  .rc-expl b{color:var(--blue);font-size:0.78rem;display:block;margin-bottom:3px;}
 
-  /* ================= APP SHELL ================= */
-  #app {
-    display: none; min-height: 100vh;
-    flex-direction: column;
-  }
-  #app.visible { display: flex; animation: appFadeIn 0.4s ease; }
-  @keyframes appFadeIn { from{opacity:0} to{opacity:1} }
+  /* LEADERBOARD */
+  .lb-header{background:linear-gradient(135deg,var(--purple),var(--purple-light));padding:14px 16px;display:flex;align-items:center;gap:12px;color:#fff;}
+  .lb-content{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:10px;}
+  .lb-card{background:#fff;border-radius:14px;padding:13px 16px;display:flex;align-items:center;gap:12px;box-shadow:0 2px 10px rgba(90,45,130,0.08);transition:transform 0.15s;}
+  .lb-card:hover{transform:translateX(2px);}
+  .lb-rank{width:36px;height:36px;border-radius:10px;font-family:'Poppins',sans-serif;font-weight:800;font-size:1rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .r1{background:linear-gradient(135deg,#C89B14,#FFD700);color:#fff;}
+  .r2{background:linear-gradient(135deg,#888,#aaa);color:#fff;}
+  .r3{background:linear-gradient(135deg,#C05020,#E07840);color:#fff;}
+  .rn{background:#f0f0f0;color:var(--text-mid);}
+  .lb-info{flex:1;}
+  .lb-name{font-family:'Poppins',sans-serif;font-weight:700;font-size:0.9rem;color:var(--text-dark);}
+  .lb-meta{font-size:0.75rem;color:var(--text-mid);margin-top:2px;}
+  .lb-score{font-family:'Poppins',sans-serif;font-weight:800;font-size:1.1rem;color:var(--purple);}
+  .you-tag{font-size:0.65rem;font-weight:700;background:rgba(90,45,130,0.12);color:var(--purple);padding:2px 7px;border-radius:99px;margin-left:6px;}
 
-  /* ================= HEADER ================= */
-  .header {
-    background: #fff;
-    border-bottom: 2px solid rgba(200,155,20,0.13);
-    padding: 12px 20px;
-    display: flex; align-items: center; gap: 12px;
-    box-shadow: 0 2px 12px rgba(26,62,140,0.07);
-    position: sticky; top: 0; z-index: 100;
-  }
-  .header-logo {
-    display: flex; align-items: center; gap: 10px;
-  }
-  .logo-icon {
-    width: 38px; height: 38px;
-    background: linear-gradient(135deg, var(--blue-dark), var(--blue));
-    border-radius: 10px;
-    display: flex; align-items: center; justify-content: center;
-    box-shadow: 0 2px 10px rgba(26,62,140,0.25);
-  }
-  .logo-text {
-    font-family: 'Poppins', sans-serif;
-    font-weight: 700; font-size: 0.8rem;
-    color: var(--blue);
-    line-height: 1.2;
-  }
-  .logo-text span { color: var(--gold); display: block; font-size: 0.65rem; font-weight: 600; }
-  .header-greeting {
-    margin-left: auto;
-    font-size: 0.85rem; color: var(--text-mid); font-weight: 600;
-  }
+  /* ANALYTICS */
+  .ana-header{background:linear-gradient(135deg,var(--blue-dark),var(--blue));padding:14px 16px;display:flex;align-items:center;gap:12px;color:#fff;}
+  .ana-content{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:14px;}
+  .ana-card{background:#fff;border-radius:16px;padding:16px;box-shadow:0 2px 12px rgba(26,62,140,0.08);}
+  .ana-title{font-family:'Poppins',sans-serif;font-weight:700;font-size:0.85rem;color:var(--text-mid);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:12px;}
+  .big-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;}
+  .ana-stat{background:var(--bg-light);border-radius:12px;padding:12px;text-align:center;}
+  .ana-val{font-family:'Poppins',sans-serif;font-weight:800;font-size:1.5rem;color:var(--blue);}
+  .ana-lbl{font-size:0.73rem;color:var(--text-mid);margin-top:2px;}
+  .bar-row{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
+  .bar-label{font-size:0.82rem;font-weight:600;width:72px;flex-shrink:0;}
+  .bar-wrap{flex:1;height:10px;background:#eee;border-radius:99px;overflow:hidden;}
+  .bar-fill{height:100%;border-radius:99px;transition:width 0.8s ease;}
+  .bar-pct{font-size:0.78rem;font-weight:700;color:var(--text-mid);width:35px;text-align:right;}
+  .hist-item{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid #f0f0f0;}
+  .hist-item:last-child{border-bottom:none;}
+  .hist-icon{width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;}
+  .hist-info{flex:1;}
+  .hist-name{font-family:'Poppins',sans-serif;font-weight:600;font-size:0.85rem;}
+  .hist-meta{font-size:0.72rem;color:var(--text-mid);margin-top:2px;}
+  .hist-score{font-family:'Poppins',sans-serif;font-weight:800;font-size:1rem;}
 
-  /* ================= SCREENS ================= */
-  .screen { display: none; flex-direction: column; flex: 1; }
-  .screen.active { display: flex; }
+  /* USER MODAL */
+  .user-input{width:100%;padding:13px 16px;border:2px solid rgba(26,62,140,0.15);border-radius:12px;font-family:'Nunito',sans-serif;font-size:1rem;color:var(--text-dark);outline:none;transition:border-color 0.15s;margin-bottom:12px;}
+  .user-input:focus{border-color:var(--blue);}
+  .user-save-btn{width:100%;padding:14px;background:linear-gradient(135deg,var(--blue-dark),var(--blue));color:#fff;border:none;border-radius:12px;font-family:'Poppins',sans-serif;font-weight:700;font-size:1rem;cursor:pointer;}
 
-  /* ================= HOME SCREEN ================= */
-  .home-hero {
-    padding: 32px 20px 16px;
-    text-align: center;
-  }
-  .home-hero h1 {
-    font-size: clamp(1.3rem, 5vw, 1.9rem);
-    color: var(--blue);
-    line-height: 1.3;
-    margin-bottom: 8px;
-  }
-  .home-hero p { color: var(--text-mid); font-size: 0.95rem; }
+  /* DIALOG */
+  .dialog-overlay{position:fixed;inset:0;z-index:400;background:rgba(0,0,0,0.55);display:flex;align-items:center;justify-content:center;}
+  .dialog-box{background:#fff;border-radius:20px;padding:24px 22px;width:min(340px,90vw);box-shadow:0 12px 48px rgba(0,0,0,0.3);animation:dBoxIn 0.25s ease;}
+  @keyframes dBoxIn{from{opacity:0;transform:scale(0.85)}to{opacity:1;transform:scale(1)}}
+  .dialog-title{font-family:'Poppins',sans-serif;font-weight:700;font-size:1.1rem;margin-bottom:8px;}
+  .dialog-body{font-size:0.9rem;color:var(--text-mid);margin-bottom:20px;line-height:1.5;}
+  .dialog-actions{display:flex;gap:10px;}
+  .dialog-btn{flex:1;padding:11px;border-radius:11px;border:none;font-family:'Poppins',sans-serif;font-weight:700;font-size:0.9rem;cursor:pointer;transition:all 0.15s;}
+  .d-cancel{background:#f0f0f0;color:var(--text-dark);}
+  .d-confirm{background:var(--red);color:#fff;}
+  .dialog-btn:hover{transform:scale(1.03);}
 
-  .subject-grid {
-    padding: 12px 16px 24px;
-    display: flex; flex-direction: column; gap: 14px;
-  }
-  @media(min-width:560px) {
-    .subject-grid { flex-direction: row; flex-wrap: wrap; justify-content: center; }
-    .subject-card { flex: 1; min-width: 160px; max-width: 220px; }
-  }
+  /* TOAST */
+  .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);background:#1E2240;color:#fff;padding:10px 20px;border-radius:12px;font-family:'Poppins',sans-serif;font-weight:600;font-size:0.85rem;z-index:500;transition:transform 0.3s ease;white-space:nowrap;box-shadow:0 4px 24px rgba(0,0,0,0.4);}
+  .toast.show{transform:translateX(-50%) translateY(0);}
+  .toast.ok{border-left:4px solid var(--green-light);}
+  .toast.err{border-left:4px solid var(--red);}
 
-  .subject-card {
-    border-radius: 18px;
-    padding: 22px 18px;
-    cursor: pointer;
-    color: #fff;
-    box-shadow: 0 6px 28px rgba(0,0,0,0.18);
-    transition: transform 0.18s, box-shadow 0.18s;
-    position: relative; overflow: hidden;
-    display: flex; flex-direction: column; gap: 8px;
-  }
-  .subject-card:hover { transform: translateY(-4px) scale(1.02); box-shadow: 0 12px 40px rgba(0,0,0,0.22); }
-  .subject-card:active { transform: scale(0.97); }
-  .subject-card::before {
-    content: ''; position: absolute; inset: 0;
-    background: rgba(255,255,255,0.05);
-    border-radius: inherit;
-  }
-  .card-physics   { background: linear-gradient(135deg, #1A3E8C 0%, #2551B5 100%); }
-  .card-biology   { background: linear-gradient(135deg, #1A6B3C 0%, #2E9B5A 100%); }
-  .card-chemistry { background: linear-gradient(135deg, #7A2A0A 0%, #C05020 100%); }
+  /* UTILS */
+  .hidden{display:none!important;}
+  .empty{text-align:center;padding:40px 20px;color:var(--text-mid);}
+  .empty-icon{font-size:3rem;margin-bottom:12px;}
+  .empty-title{font-family:'Poppins',sans-serif;font-weight:600;font-size:1rem;color:var(--text-dark);margin-bottom:6px;}
+  .empty-sub{font-size:0.85rem;}
+  ::-webkit-scrollbar{width:5px;}
+  ::-webkit-scrollbar-track{background:transparent;}
+  ::-webkit-scrollbar-thumb{background:rgba(200,155,20,0.3);border-radius:99px;}
 
-  .card-icon { font-size: 2.2rem; line-height: 1; }
-  .card-name { font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 1.15rem; }
-  .card-meta { font-size: 0.8rem; opacity: 0.85; }
+  /* PYQ CARD */
+  .card-pyq{background:linear-gradient(135deg,#1A3E8C,#8B5CF6);}
 
-  /* ================= TOPIC SCREEN ================= */
-  .topic-header {
-    background: linear-gradient(135deg, var(--blue-dark) 0%, var(--blue) 100%);
-    padding: 14px 16px;
-    display: flex; align-items: center; gap: 12px;
-    color: #fff;
-  }
-  .topic-header-title {
-    font-family: 'Poppins', sans-serif; font-weight: 700;
-    font-size: 1.15rem; flex: 1;
-  }
-  .back-btn {
-    background: rgba(255,255,255,0.15); border: none;
-    color: #fff; padding: 6px 12px; border-radius: 8px;
-    cursor: pointer; font-size: 1rem; display: flex; align-items: center; gap: 4px;
-    font-family: 'Nunito', sans-serif; font-weight: 600;
-    transition: background 0.15s;
-  }
-  .back-btn:hover { background: rgba(255,255,255,0.25); }
+  /* PYQ HOME */
+  .pyq-header{background:linear-gradient(135deg,#1A3E8C,#8B5CF6);padding:14px 16px;display:flex;align-items:center;gap:12px;color:#fff;}
+  .pyq-home-content{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:16px;}
+  .pyq-info-box{background:linear-gradient(135deg,rgba(26,62,140,0.08),rgba(139,92,246,0.08));border:2px solid rgba(139,92,246,0.2);border-radius:18px;padding:20px;text-align:center;}
+  .pyq-info-icon{font-size:2.5rem;margin-bottom:8px;}
+  .pyq-info-title{font-family:'Poppins',sans-serif;font-weight:700;font-size:1.1rem;color:var(--blue);margin-bottom:6px;}
+  .pyq-info-sub{font-size:0.84rem;color:var(--text-mid);line-height:1.55;}
+  .pyq-filters{background:#fff;border-radius:16px;padding:16px;box-shadow:0 2px 12px rgba(26,62,140,0.08);}
+  .pyq-filter-label{font-family:'Poppins',sans-serif;font-weight:700;font-size:0.8rem;color:var(--text-mid);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:10px;}
+  .pyq-year-grid{display:flex;flex-wrap:wrap;gap:8px;}
+  .pyq-year-btn{padding:7px 14px;border-radius:10px;border:2px solid rgba(26,62,140,0.15);background:#f8f9fc;font-family:'Poppins',sans-serif;font-weight:600;font-size:0.85rem;color:var(--text-mid);cursor:pointer;transition:all 0.15s;}
+  .pyq-year-btn:hover,.pyq-year-btn.active{background:var(--blue);color:#fff;border-color:var(--blue);transform:scale(1.04);}
+  .pyq-subject-btns{display:flex;gap:8px;flex-wrap:wrap;}
+  .pyq-sub-btn{padding:7px 14px;border-radius:10px;border:2px solid rgba(26,62,140,0.15);background:#f8f9fc;font-family:'Poppins',sans-serif;font-weight:600;font-size:0.82rem;color:var(--text-mid);cursor:pointer;transition:all 0.15s;}
+  .pyq-sub-btn:hover,.pyq-sub-btn.active{background:linear-gradient(135deg,var(--blue-dark),var(--blue));color:#fff;border-color:var(--blue);transform:scale(1.04);}
+  .pyq-start-btn{width:100%;padding:15px;background:linear-gradient(135deg,#1A3E8C,#8B5CF6);color:#fff;border:none;border-radius:14px;font-family:'Poppins',sans-serif;font-weight:700;font-size:1rem;cursor:pointer;box-shadow:0 4px 20px rgba(139,92,246,0.35);transition:all 0.15s;}
+  .pyq-start-btn:hover{transform:translateY(-2px);}
+  .pyq-hint{text-align:center;font-size:0.78rem;color:var(--text-mid);opacity:0.7;}
 
-  .tab-bar {
-    display: flex; background: #fff;
-    border-bottom: 2px solid rgba(26,62,140,0.1);
-  }
-  .tab-btn {
-    flex: 1; padding: 12px; border: none; background: none;
-    font-family: 'Poppins', sans-serif; font-weight: 600;
-    font-size: 0.95rem; color: var(--text-mid);
-    cursor: pointer; border-bottom: 3px solid transparent;
-    transition: all 0.18s;
-  }
-  .tab-btn.active {
-    color: var(--blue); border-bottom-color: var(--gold);
-    background: rgba(200,155,20,0.05);
-  }
-
-  .chapter-list { flex: 1; overflow-y: auto; padding: 12px 14px; display: flex; flex-direction: column; gap: 10px; }
-
-  .chapter-card {
-    background: #fff; border-radius: 14px;
-    padding: 14px 16px; box-shadow: 0 2px 10px rgba(26,62,140,0.07);
-    display: flex; align-items: center; gap: 12px;
-    border-left: 5px solid var(--blue);
-    transition: box-shadow 0.15s, transform 0.15s;
-  }
-  .chapter-card:hover { box-shadow: 0 5px 20px rgba(26,62,140,0.13); transform: translateX(2px); }
-  .chapter-num {
-    width: 36px; height: 36px; border-radius: 10px;
-    background: linear-gradient(135deg, var(--blue-dark), var(--blue));
-    color: #fff; font-family: 'Poppins', sans-serif; font-weight: 700;
-    font-size: 0.85rem; display: flex; align-items: center; justify-content: center;
-    flex-shrink: 0;
-  }
-  .chapter-info { flex: 1; min-width: 0; }
-  .chapter-name { font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 0.9rem; color: var(--text-dark); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .chapter-sub { font-size: 0.75rem; color: var(--text-mid); margin-top: 2px; }
-  .progress-bar-wrap { height: 5px; background: #eee; border-radius: 99px; margin-top: 6px; }
-  .progress-bar-fill { height: 100%; border-radius: 99px; background: linear-gradient(90deg, var(--gold), var(--gold-light)); transition: width 0.3s; }
-  .start-btn {
-    background: linear-gradient(135deg, var(--gold-dark), var(--gold));
-    color: #fff; border: none; padding: 8px 16px; border-radius: 10px;
-    font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 0.85rem;
-    cursor: pointer; white-space: nowrap;
-    box-shadow: 0 3px 12px rgba(200,155,20,0.35);
-    transition: all 0.15s;
-  }
-  .start-btn:hover { transform: scale(1.05); box-shadow: 0 5px 18px rgba(200,155,20,0.5); }
-  .start-btn:active { transform: scale(0.97); }
-
-  /* ================= QUIZ SCREEN ================= */
-  .quiz-screen { background: #0F1020; }
-
-  .quiz-topbar {
-    background: #16192E; padding: 12px 16px;
-    display: flex; align-items: center; gap: 10px;
-    border-bottom: 1px solid rgba(200,155,20,0.15);
-  }
-  .quiz-chapter-name {
-    flex: 1; text-align: center;
-    font-family: 'Poppins', sans-serif; font-weight: 600;
-    color: #fff; font-size: 0.9rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-  }
-  .score-pill {
-    background: linear-gradient(135deg, var(--gold-dark), var(--gold));
-    color: #fff; padding: 5px 14px; border-radius: 99px;
-    font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 0.9rem;
-    white-space: nowrap; box-shadow: 0 2px 10px rgba(200,155,20,0.4);
-    transition: transform 0.15s;
-  }
-  .score-pill.animate { animation: scorePop 0.35s ease; }
-  .score-pill.shake { animation: scoreShake 0.4s ease; }
-  @keyframes scorePop {
-    0%{transform:scale(1)}40%{transform:scale(1.25)}70%{transform:scale(0.95)}100%{transform:scale(1)}
-  }
-  @keyframes scoreShake {
-    0%,100%{transform:translateX(0)}20%{transform:translateX(-6px)}40%{transform:translateX(6px)}60%{transform:translateX(-4px)}80%{transform:translateX(4px)}
-  }
-
-  .quiz-progress-wrap { background: #16192E; padding: 8px 16px 12px; }
-  .quiz-progress-bar { height: 6px; background: rgba(255,255,255,0.1); border-radius: 99px; overflow: hidden; }
-  .quiz-progress-fill { height: 100%; border-radius: 99px; background: linear-gradient(90deg, var(--gold), #FFD700); transition: width 0.4s ease; }
-  .quiz-counter { font-size: 0.78rem; color: rgba(255,255,255,0.5); margin-top: 5px; text-align: right; }
-
-  .quiz-content { flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 14px; }
-
-  .question-card {
-    background: #1E2240; border-radius: 18px;
-    padding: 20px 18px;
-    box-shadow: 0 4px 24px rgba(0,0,0,0.4);
-    border: 1px solid rgba(200,155,20,0.12);
-    animation: qCardIn 0.3s ease;
-  }
-  @keyframes qCardIn { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
-  .q-num { font-size: 0.75rem; color: var(--gold); font-weight: 700; letter-spacing: 0.08em; margin-bottom: 10px; }
-  .q-text { color: #fff; font-size: 1rem; line-height: 1.65; font-family: 'Nunito', sans-serif; }
-
-  .options-list { display: flex; flex-direction: column; gap: 10px; }
-  .option-btn {
-    background: #1E2240; border: 2px solid rgba(255,255,255,0.1);
-    border-radius: 13px; padding: 13px 16px;
-    display: flex; align-items: flex-start; gap: 12px;
-    cursor: pointer; text-align: left;
-    transition: border-color 0.15s, background 0.15s, transform 0.1s;
-    animation: optIn 0.25s ease backwards;
-  }
-  .option-btn:nth-child(1){animation-delay:0.05s}
-  .option-btn:nth-child(2){animation-delay:0.1s}
-  .option-btn:nth-child(3){animation-delay:0.15s}
-  .option-btn:nth-child(4){animation-delay:0.2s}
-  @keyframes optIn { from{opacity:0;transform:translateX(-10px)} to{opacity:1;transform:translateX(0)} }
-  .option-btn:hover:not(:disabled) { border-color: var(--gold); background: rgba(200,155,20,0.07); transform: translateX(3px); }
-  .option-btn:disabled { cursor: default; }
-
-  .option-letter {
-    width: 28px; height: 28px; border-radius: 8px;
-    background: rgba(255,255,255,0.08); color: var(--gold);
-    font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 0.82rem;
-    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
-  }
-  .option-text { color: rgba(255,255,255,0.9); font-size: 0.93rem; line-height: 1.5; padding-top: 4px; }
-
-  .option-btn.correct { border-color: var(--green-light); background: rgba(46,155,90,0.15); }
-  .option-btn.correct .option-letter { background: var(--green-light); color: #fff; }
-  .option-btn.wrong   { border-color: var(--red); background: rgba(192,57,43,0.15); }
-  .option-btn.wrong .option-letter { background: var(--red); color: #fff; }
-  .option-btn.revealed { border-color: var(--green-light); background: rgba(46,155,90,0.08); opacity: 0.7; }
-  .option-btn.revealed .option-letter { background: var(--green-light); color: #fff; }
-
-  .feedback-badge {
-    display: flex; align-items: center; justify-content: center;
-    gap: 8px; padding: 10px; border-radius: 10px;
-    font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 0.9rem;
-    animation: feedIn 0.25s ease;
-  }
-  @keyframes feedIn { from{opacity:0;transform:scale(0.9)} to{opacity:1;transform:scale(1)} }
-  .feedback-badge.correct { background: rgba(46,155,90,0.2); color: var(--green-light); }
-  .feedback-badge.wrong   { background: rgba(192,57,43,0.2);  color: #ff6b6b; }
-
-  .next-btn {
-    background: linear-gradient(135deg, var(--gold-dark), var(--gold));
-    color: #fff; border: none; padding: 14px; border-radius: 14px;
-    font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 1rem;
-    cursor: pointer; box-shadow: 0 4px 20px rgba(200,155,20,0.4);
-    transition: all 0.15s; animation: nextIn 0.3s ease;
-    display: flex; align-items: center; justify-content: center; gap: 8px;
-  }
-  @keyframes nextIn { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
-  .next-btn:hover { transform: translateY(-2px); box-shadow: 0 7px 28px rgba(200,155,20,0.55); }
-  .next-btn:active { transform: scale(0.98); }
-
-  /* ================= RESULTS SCREEN ================= */
-  .results-screen { background: linear-gradient(160deg, var(--blue-dark) 0%, #0F1020 100%); }
-  .results-content { flex: 1; overflow-y: auto; padding: 20px 16px; display: flex; flex-direction: column; gap: 18px; align-items: center; }
-
-  .score-reveal-ring {
-    width: 160px; height: 160px; border-radius: 50%;
-    border: 8px solid rgba(200,155,20,0.2);
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
-    position: relative;
-    box-shadow: 0 0 40px rgba(200,155,20,0.3);
-    animation: ringIn 0.5s ease;
-  }
-  .score-ring-svg { position: absolute; inset: -8px; }
-  @keyframes ringIn { from{opacity:0;transform:scale(0.5)} to{opacity:1;transform:scale(1)} }
-  .score-big { font-family: 'Poppins', sans-serif; font-weight: 900; font-size: 2.8rem; color: var(--gold); line-height: 1; }
-  .score-label-s { font-size: 0.78rem; color: rgba(255,255,255,0.6); font-weight: 600; }
-
-  .perf-badge {
-    padding: 8px 24px; border-radius: 99px;
-    font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 1rem;
-    animation: badgeIn 0.4s 0.3s ease backwards;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-  }
-  @keyframes badgeIn { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
-  .perf-excellent { background: linear-gradient(135deg, #1A6B3C, #2E9B5A); color: #fff; }
-  .perf-good      { background: linear-gradient(135deg, var(--gold-dark), var(--gold)); color: #fff; }
-  .perf-practice  { background: linear-gradient(135deg, var(--blue-dark), var(--blue)); color: #fff; }
-
-  .stats-grid {
-    display: grid; grid-template-columns: repeat(2,1fr); gap: 12px; width: 100%;
-    animation: statsIn 0.4s 0.5s ease backwards;
-  }
-  @keyframes statsIn { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
-  .stat-box {
-    background: rgba(255,255,255,0.07); border-radius: 14px;
-    padding: 14px; text-align: center; border: 1px solid rgba(255,255,255,0.08);
-  }
-  .stat-val { font-family: 'Poppins', sans-serif; font-weight: 800; font-size: 1.6rem; color: #fff; }
-  .stat-lbl { font-size: 0.75rem; color: rgba(255,255,255,0.55); margin-top: 2px; }
-  .stat-box.green .stat-val { color: var(--green-light); }
-  .stat-box.red   .stat-val { color: #ff6b6b; }
-  .stat-box.gold  .stat-val { color: var(--gold); }
-
-  .neet-score-box {
-    background: linear-gradient(135deg, rgba(200,155,20,0.2), rgba(200,155,20,0.08));
-    border: 2px solid rgba(200,155,20,0.35);
-    border-radius: 16px; padding: 16px; width: 100%;
-    text-align: center; animation: statsIn 0.4s 0.7s ease backwards;
-  }
-  .neet-score-box .neet-label { color: rgba(255,255,255,0.7); font-size: 0.8rem; margin-bottom: 5px; }
-  .neet-score-box .neet-val { font-family: 'Poppins', sans-serif; font-weight: 900; font-size: 2.2rem; color: var(--gold); }
-  .neet-score-box .neet-max { font-size: 0.8rem; color: rgba(255,255,255,0.5); }
-
-  .result-btns { display: flex; flex-direction: column; gap: 10px; width: 100%; animation: statsIn 0.4s 0.9s ease backwards; }
-  .result-btn {
-    padding: 14px; border-radius: 14px; border: none;
-    font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 0.95rem;
-    cursor: pointer; transition: all 0.15s;
-  }
-  .result-btn.primary { background: linear-gradient(135deg, var(--gold-dark), var(--gold)); color: #fff; box-shadow: 0 4px 20px rgba(200,155,20,0.4); }
-  .result-btn.secondary { background: rgba(255,255,255,0.1); color: #fff; border: 1px solid rgba(255,255,255,0.15); }
-  .result-btn:hover { transform: translateY(-2px); }
-  .result-btn:active { transform: scale(0.98); }
-
-  /* ================= REVIEW SCREEN ================= */
-  .review-header {
-    background: linear-gradient(135deg, var(--blue-dark) 0%, var(--blue) 100%);
-    padding: 14px 16px; display: flex; align-items: center; gap: 12px; color: #fff;
-  }
-  .review-list { flex: 1; overflow-y: auto; padding: 12px; display: flex; flex-direction: column; gap: 14px; }
-  .review-card {
-    background: #fff; border-radius: 16px;
-    padding: 16px; box-shadow: 0 2px 12px rgba(26,62,140,0.1);
-  }
-  .review-card.rc-correct { border-left: 5px solid var(--green-light); }
-  .review-card.rc-wrong   { border-left: 5px solid var(--red); }
-  .review-card.rc-skip    { border-left: 5px solid #aaa; }
-  .rc-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; gap: 8px; }
-  .rc-qnum { font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 0.8rem; color: var(--blue); }
-  .rc-badge { padding: 2px 10px; border-radius: 99px; font-size: 0.72rem; font-weight: 700; }
-  .rc-badge.correct { background: rgba(46,155,90,0.15); color: var(--green); }
-  .rc-badge.wrong   { background: rgba(192,57,43,0.12); color: var(--red); }
-  .rc-badge.skip    { background: rgba(0,0,0,0.06); color: #666; }
-  .rc-question { font-size: 0.92rem; color: var(--text-dark); line-height: 1.6; margin-bottom: 12px; }
-  .rc-options { display: flex; flex-direction: column; gap: 6px; margin-bottom: 10px; }
-  .rc-opt {
-    padding: 8px 12px; border-radius: 9px;
-    font-size: 0.85rem; display: flex; align-items: flex-start; gap: 8px;
-    border: 1.5px solid #eee; color: var(--text-dark);
-  }
-  .rc-opt .opt-lbl { font-weight: 700; flex-shrink: 0; }
-  .rc-opt.is-correct { background: rgba(46,155,90,0.1); border-color: var(--green-light); color: var(--green); }
-  .rc-opt.is-wrong   { background: rgba(192,57,43,0.1); border-color: var(--red); color: var(--red); }
-  .rc-explanation {
-    background: rgba(26,62,140,0.05); border-radius: 9px;
-    padding: 9px 12px; font-size: 0.82rem; color: var(--text-mid);
-    border-left: 3px solid var(--gold); line-height: 1.55;
-  }
-  .rc-expl-label { font-weight: 700; color: var(--blue); font-size: 0.78rem; margin-bottom: 3px; }
-
-  /* ================= DIALOG ================= */
-  .dialog-overlay {
-    position: fixed; inset: 0; z-index: 200;
-    background: rgba(0,0,0,0.55); display: flex; align-items: center; justify-content: center;
-    animation: dOverIn 0.2s ease;
-  }
-  @keyframes dOverIn { from{opacity:0} to{opacity:1} }
-  .dialog-box {
-    background: #fff; border-radius: 20px; padding: 24px 22px;
-    width: min(340px, 90vw); box-shadow: 0 12px 48px rgba(0,0,0,0.3);
-    animation: dBoxIn 0.25s ease;
-  }
-  @keyframes dBoxIn { from{opacity:0;transform:scale(0.85)} to{opacity:1;transform:scale(1)} }
-  .dialog-title { font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 1.1rem; margin-bottom: 8px; }
-  .dialog-body { font-size: 0.9rem; color: var(--text-mid); margin-bottom: 20px; line-height: 1.5; }
-  .dialog-actions { display: flex; gap: 10px; }
-  .dialog-btn { flex: 1; padding: 11px; border-radius: 11px; border: none; font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 0.9rem; cursor: pointer; transition: all 0.15s; }
-  .dialog-btn.cancel { background: #f0f0f0; color: var(--text-dark); }
-  .dialog-btn.confirm { background: var(--red); color: #fff; }
-  .dialog-btn:hover { transform: scale(1.03); }
-
-  /* ================= UTILS ================= */
-  sup { font-size: 0.7em; vertical-align: super; }
-  sub { font-size: 0.7em; vertical-align: sub; }
-
-  .hidden { display: none !important; }
-
-  ::-webkit-scrollbar { width: 5px; }
-  ::-webkit-scrollbar-track { background: transparent; }
-  ::-webkit-scrollbar-thumb { background: rgba(200,155,20,0.3); border-radius: 99px; }
+  /* PYQ TIMER BAR */
+  .pyq-timer-wrap{background:#1A1D35;padding:8px 16px 10px;border-bottom:1px solid rgba(200,155,20,0.1);}
+  .pyq-timer-label{font-size:0.78rem;color:rgba(255,255,255,0.6);margin-bottom:5px;font-family:'Poppins',sans-serif;font-weight:600;text-align:center;}
+  .pyq-timer-bar-bg{height:5px;background:rgba(255,255,255,0.1);border-radius:99px;overflow:hidden;}
+  .pyq-timer-bar{height:100%;background:linear-gradient(90deg,var(--gold),#FFD700);border-radius:99px;width:100%;transition:width 1s linear;}
+  .pyq-year-tag{font-size:0.72rem;color:var(--gold);font-weight:700;letter-spacing:0.06em;margin-bottom:4px;}
 </style>
 </head>
 <body>
 
-<!-- ======================= SPLASH ======================= -->
+<!-- SPLASH -->
 <div id="splash">
   <div style="position:relative;display:flex;align-items:center;justify-content:center;">
-    <!-- Benzene SVG left -->
-    <svg class="benzene-left" width="70" height="80" viewBox="0 0 70 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg class="benzene-left" width="70" height="80" viewBox="0 0 70 80" fill="none">
       <polygon points="35,5 65,22.5 65,57.5 35,75 5,57.5 5,22.5" stroke="rgba(200,155,20,0.6)" stroke-width="2.5" fill="none"/>
       <line x1="35" y1="15" x2="35" y2="65" stroke="rgba(200,155,20,0.3)" stroke-width="1.5" stroke-dasharray="5,5"/>
       <line x1="15" y1="27" x2="55" y2="53" stroke="rgba(200,155,20,0.3)" stroke-width="1.5" stroke-dasharray="5,5"/>
       <line x1="55" y1="27" x2="15" y2="53" stroke="rgba(200,155,20,0.3)" stroke-width="1.5" stroke-dasharray="5,5"/>
     </svg>
-
     <div class="splash-atom">
       <div class="atom-nucleus"></div>
       <div class="orbit orbit-1"><div class="electron"></div></div>
       <div class="orbit orbit-2"><div class="electron"></div></div>
       <div class="orbit orbit-3"><div class="electron"></div></div>
     </div>
-
-    <!-- Benzene SVG right -->
-    <svg class="benzene-right" width="70" height="80" viewBox="0 0 70 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg class="benzene-right" width="70" height="80" viewBox="0 0 70 80" fill="none">
       <polygon points="35,5 65,22.5 65,57.5 35,75 5,57.5 5,22.5" stroke="rgba(200,155,20,0.6)" stroke-width="2.5" fill="none"/>
       <line x1="35" y1="15" x2="35" y2="65" stroke="rgba(200,155,20,0.3)" stroke-width="1.5" stroke-dasharray="5,5"/>
       <line x1="15" y1="27" x2="55" y2="53" stroke="rgba(200,155,20,0.3)" stroke-width="1.5" stroke-dasharray="5,5"/>
       <line x1="55" y1="27" x2="15" y2="53" stroke="rgba(200,155,20,0.3)" stroke-width="1.5" stroke-dasharray="5,5"/>
     </svg>
   </div>
-
-  <div class="splash-title">
-    SCIENCE SIMPLIFIED
-    <span class="splash-institute">INSTITUTE</span>
-  </div>
-  <div class="splash-tagline">
-    Simplify<span class="tagline-dot">.</span> Practice<span class="tagline-dot">.</span> Excel<span class="tagline-dot">.</span>
-  </div>
+  <div class="splash-title">SCIENCE SIMPLIFIED<span class="splash-institute">INSTITUTE</span></div>
+  <div class="splash-tagline">Simplify<span class="tagline-dot">.</span> Practice<span class="tagline-dot">.</span> Excel<span class="tagline-dot">.</span></div>
 </div>
 
-<!-- ======================= APP ======================= -->
+<!-- APP -->
 <div id="app">
   <!-- HEADER -->
   <div class="header">
-    <div class="header-logo">
+    <div style="display:flex;align-items:center;gap:10px;">
       <div class="logo-icon">
         <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
           <circle cx="11" cy="11" r="4" fill="#C89B14"/>
@@ -584,43 +380,55 @@
       </div>
       <div class="logo-text">Science Simplified<span>Institute</span></div>
     </div>
-    <div class="header-greeting" id="greeting">Good Morning, Explorer! 👋</div>
+    <div class="header-right">
+      <div class="header-greeting" id="greeting">Good Morning! 👋</div>
+      <button class="user-btn" id="user-btn" onclick="openUserModal()">👤 Set Name</button>
+    </div>
   </div>
 
-  <!-- HOME SCREEN -->
+  <!-- HOME -->
   <div class="screen active" id="screen-home">
     <div class="home-hero">
       <h1>What do you want to<br>practice today?</h1>
-      <p>NEET PYQs · NCERT 11th & 12th · Chapter-wise</p>
+      <p>NEET MCQ · Chapter-wise · Levels · Supabase powered</p>
     </div>
     <div class="subject-grid">
       <div class="subject-card card-physics" onclick="openSubject('physics')">
-        <div class="card-icon">⚛️</div>
-        <div class="card-name poppins">Physics</div>
+        <div class="card-icon">⚛️</div><div class="card-name poppins">Physics</div>
         <div class="card-meta">30 chapters · 850+ questions</div>
       </div>
       <div class="subject-card card-biology" onclick="openSubject('biology')">
-        <div class="card-icon">🧬</div>
-        <div class="card-name poppins">Biology</div>
+        <div class="card-icon">🧬</div><div class="card-name poppins">Biology</div>
         <div class="card-meta">38 chapters · 1200+ questions</div>
       </div>
       <div class="subject-card card-chemistry" onclick="openSubject('chemistry')">
-        <div class="card-icon">🧪</div>
-        <div class="card-name poppins">Chemistry</div>
+        <div class="card-icon">🧪</div><div class="card-name poppins">Chemistry</div>
         <div class="card-meta">34 chapters · 950+ questions</div>
       </div>
+      <div class="subject-card card-lb" onclick="openLeaderboard()">
+        <div class="card-icon">🏆</div><div class="card-name poppins">Leaderboard</div>
+        <div class="card-meta">Live rankings · Top scorers</div>
+      </div>
+      <div class="subject-card card-ana" onclick="openAnalytics()">
+        <div class="card-icon">📊</div><div class="card-name poppins">My Progress</div>
+        <div class="card-meta">History · Stats · Analytics</div>
+      </div>
+      <div class="subject-card card-pyq" onclick="openPYQ()">
+        <div class="card-icon">📅</div><div class="card-name poppins">PYQ Attempt</div>
+        <div class="card-meta">Previous Year Questions · Attempt Mode</div>
+      </div>
     </div>
-    <div style="padding:0 16px 24px; text-align:center; color: var(--text-mid); font-size:0.8rem; opacity:0.7;">
-      NEET marking scheme: +4 correct · −1 wrong
+    <div style="padding:0 16px 24px;text-align:center;color:var(--text-mid);font-size:0.78rem;opacity:0.7;">
+      NEET marking: +4 correct · −1 wrong · Progress saved to Supabase
     </div>
   </div>
 
-  <!-- TOPIC SELECTION SCREEN -->
+  <!-- TOPICS -->
   <div class="screen" id="screen-topics">
     <div class="topic-header">
       <button class="back-btn" onclick="goHome()">← Back</button>
       <div class="topic-header-title" id="topic-subject-name">Physics</div>
-      <span id="topic-subject-icon" style="font-size:1.5rem;">⚛️</span>
+      <span id="topic-icon" style="font-size:1.5rem;">⚛️</span>
     </div>
     <div class="tab-bar">
       <button class="tab-btn active" id="tab-11" onclick="switchTab(11)">Class 11</button>
@@ -629,652 +437,964 @@
     <div class="chapter-list" id="chapter-list"></div>
   </div>
 
-  <!-- QUIZ SCREEN -->
+  <!-- LOADING -->
+  <div class="screen" id="screen-loading">
+    <div class="loading-screen">
+      <div class="loading-badge">🗄️ Supabase</div>
+      <div class="spinner"></div>
+      <div class="loading-text" id="loading-text">Fetching questions…</div>
+      <div class="loading-sub" id="loading-sub">Loading from database</div>
+    </div>
+  </div>
+
+  <!-- QUIZ -->
   <div class="screen quiz-screen" id="screen-quiz">
     <div class="quiz-topbar">
       <button class="back-btn" onclick="exitQuiz()" style="background:rgba(255,255,255,0.1);">✕ Exit</button>
-      <div class="quiz-chapter-name" id="quiz-chapter-name">Chapter Name</div>
+      <div class="quiz-title" id="quiz-title">Chapter</div>
+      <div class="level-pill pill-basic" id="level-pill">Basic</div>
       <div class="score-pill" id="score-pill">Score: 0</div>
     </div>
     <div class="quiz-progress-wrap">
       <div class="quiz-progress-bar"><div class="quiz-progress-fill" id="quiz-progress" style="width:0%"></div></div>
-      <div class="quiz-counter" id="quiz-counter">Q 1 / 10</div>
+      <div class="quiz-counter" id="quiz-counter">Q 1 / 8</div>
     </div>
     <div class="quiz-content" id="quiz-content"></div>
   </div>
 
-  <!-- RESULTS SCREEN -->
+  <!-- RESULTS -->
   <div class="screen results-screen" id="screen-results">
     <div class="quiz-topbar" style="background:#16192E;">
       <div style="flex:1;text-align:center;font-family:'Poppins',sans-serif;font-weight:700;color:#fff;font-size:1rem;">Quiz Complete! 🎉</div>
     </div>
     <div class="results-content">
-      <div class="score-reveal-ring">
+      <div class="score-ring-wrap">
         <svg class="score-ring-svg" viewBox="0 0 176 176" fill="none">
           <circle cx="88" cy="88" r="80" stroke="rgba(200,155,20,0.15)" stroke-width="8"/>
-          <circle cx="88" cy="88" r="80" stroke="url(#ringGrad)" stroke-width="8"
-            stroke-dasharray="502" id="score-ring-arc" stroke-dashoffset="502"
-            stroke-linecap="round" transform="rotate(-90 88 88)" style="transition:stroke-dashoffset 1.2s ease"/>
-          <defs>
-            <linearGradient id="ringGrad" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0%" stop-color="#C89B14"/>
-              <stop offset="100%" stop-color="#FFD700"/>
-            </linearGradient>
-          </defs>
+          <circle cx="88" cy="88" r="80" stroke="url(#rg)" stroke-width="8" stroke-dasharray="502" id="score-arc" stroke-dashoffset="502" stroke-linecap="round" transform="rotate(-90 88 88)" style="transition:stroke-dashoffset 1.2s ease"/>
+          <defs><linearGradient id="rg" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#C89B14"/><stop offset="100%" stop-color="#FFD700"/></linearGradient></defs>
         </svg>
-        <div class="score-big" id="result-score-display">0</div>
-        <div class="score-label-s">NEET Score</div>
+        <div class="score-big" id="score-display">0</div>
+        <div class="score-lbl">NEET Score</div>
       </div>
       <div class="perf-badge" id="perf-badge">🏆 Excellent!</div>
       <div class="stats-grid">
-        <div class="stat-box green"><div class="stat-val" id="r-correct">0</div><div class="stat-lbl">✅ Correct</div></div>
-        <div class="stat-box red"><div class="stat-val" id="r-wrong">0</div><div class="stat-lbl">❌ Wrong</div></div>
+        <div class="stat-box g"><div class="stat-val" id="r-correct">0</div><div class="stat-lbl">✅ Correct</div></div>
+        <div class="stat-box r"><div class="stat-val" id="r-wrong">0</div><div class="stat-lbl">❌ Wrong</div></div>
         <div class="stat-box"><div class="stat-val" id="r-skip">0</div><div class="stat-lbl">⏭️ Skipped</div></div>
         <div class="stat-box gold"><div class="stat-val" id="r-total">0</div><div class="stat-lbl">📋 Total</div></div>
       </div>
-      <div class="neet-score-box">
-        <div class="neet-label">NEET Score (+4/−1)</div>
+      <div class="neet-box">
+        <div class="neet-lbl">NEET Score (+4/−1)</div>
         <div class="neet-val" id="r-neet">0</div>
-        <div class="neet-max" id="r-max-neet">/ 0 maximum</div>
+        <div class="neet-max" id="r-max">/ 0 maximum</div>
       </div>
-      <div class="result-btns">
+      <div class="save-status" id="save-status">💾 Saving to Supabase…</div>
+      <div class="result-btns" id="result-btns-wrap">
         <button class="result-btn primary" onclick="retryChapter()">🔄 Retry Chapter</button>
         <button class="result-btn secondary" onclick="reviewAnswers()">📖 Review Answers</button>
         <button class="result-btn secondary" onclick="goTopics()">📚 Choose Another Chapter</button>
+        <button class="result-btn secondary" onclick="openLeaderboard()">🏆 View Leaderboard</button>
       </div>
     </div>
   </div>
 
-  <!-- REVIEW SCREEN -->
+  <!-- REVIEW -->
   <div class="screen" id="screen-review">
     <div class="review-header">
-      <button class="back-btn" onclick="backToResults()">← Back</button>
+      <button class="back-btn" onclick="showScreen('results')">← Back</button>
       <div style="flex:1;text-align:center;font-family:'Poppins',sans-serif;font-weight:700;font-size:1rem;">Answer Review</div>
     </div>
     <div class="review-list" id="review-list"></div>
   </div>
+
+  <!-- LEADERBOARD -->
+  <div class="screen" id="screen-leaderboard">
+    <div class="lb-header">
+      <button class="back-btn" onclick="goHome()">← Back</button>
+      <div class="topic-header-title">🏆 Leaderboard</div>
+      <button onclick="loadLeaderboard()" style="background:rgba(255,255,255,0.15);border:none;color:#fff;padding:6px 12px;border-radius:8px;cursor:pointer;font-size:0.8rem;font-weight:600;white-space:nowrap;">↻ Refresh</button>
+    </div>
+    <div class="lb-content" id="lb-content"></div>
+  </div>
+
+  <!-- ANALYTICS -->
+  <div class="screen" id="screen-analytics">
+    <div class="ana-header">
+      <button class="back-btn" onclick="goHome()">← Back</button>
+      <div class="topic-header-title">📊 My Progress</div>
+    </div>
+    <div class="ana-content" id="ana-content"></div>
+  </div>
+
+  <!-- PYQ HOME -->
+  <div class="screen" id="screen-pyq">
+    <div class="pyq-header">
+      <button class="back-btn" onclick="goHome()">← Back</button>
+      <div class="topic-header-title">📅 PYQ Attempt Mode</div>
+    </div>
+    <div class="pyq-home-content">
+      <div class="pyq-info-box">
+        <div class="pyq-info-icon">🎯</div>
+        <div class="pyq-info-title">Previous Year Questions</div>
+        <div class="pyq-info-sub">Real NEET questions from past papers. Answer and the next question auto-loads after 10 seconds. NEET scoring applies: +4 / −1.</div>
+      </div>
+      <div class="pyq-filters">
+        <div class="pyq-filter-label">Select Year</div>
+        <div class="pyq-year-grid" id="pyq-year-grid">
+          <!-- rendered by JS -->
+        </div>
+        <div class="pyq-filter-label" style="margin-top:14px">Select Subject</div>
+        <div class="pyq-subject-btns">
+          <button class="pyq-sub-btn active" id="pyq-sub-all" onclick="setPYQSubject('all')">All</button>
+          <button class="pyq-sub-btn" id="pyq-sub-physics" onclick="setPYQSubject('physics')">⚛️ Physics</button>
+          <button class="pyq-sub-btn" id="pyq-sub-biology" onclick="setPYQSubject('biology')">🧬 Biology</button>
+          <button class="pyq-sub-btn" id="pyq-sub-chemistry" onclick="setPYQSubject('chemistry')">🧪 Chemistry</button>
+        </div>
+      </div>
+      <button class="pyq-start-btn" onclick="startPYQAttempt()">🚀 Start Attempt Mode</button>
+      <div class="pyq-hint">💡 Auto-advances to next question after 10s once answered</div>
+    </div>
+  </div>
+
+  <!-- PYQ QUIZ -->
+  <div class="screen quiz-screen" id="screen-pyq-quiz">
+    <div class="quiz-topbar">
+      <button class="back-btn" onclick="exitPYQQuiz()" style="background:rgba(255,255,255,0.1);">✕ Exit</button>
+      <div class="quiz-title" id="pyq-quiz-title">NEET PYQ</div>
+      <div class="level-pill" id="pyq-year-pill" style="background:rgba(200,155,20,0.2);color:var(--gold)">2023</div>
+      <div class="score-pill" id="pyq-score-pill">Score: 0</div>
+    </div>
+    <div class="quiz-progress-wrap">
+      <div class="quiz-progress-bar"><div class="quiz-progress-fill" id="pyq-quiz-progress" style="width:0%"></div></div>
+      <div class="quiz-counter" id="pyq-quiz-counter">Q 1 / 20</div>
+    </div>
+    <!-- Auto-next timer bar -->
+    <div id="pyq-timer-wrap" class="pyq-timer-wrap hidden">
+      <div class="pyq-timer-label">Next question in <span id="pyq-timer-sec">10</span>s</div>
+      <div class="pyq-timer-bar-bg"><div class="pyq-timer-bar" id="pyq-timer-bar"></div></div>
+    </div>
+    <div class="quiz-content" id="pyq-quiz-content"></div>
+  </div>
 </div>
 
-<!-- DIALOG -->
+<!-- LEVEL MODAL -->
+<div class="modal-overlay hidden" id="level-modal" onclick="if(event.target===this)closeLevelModal()">
+  <div class="bottom-sheet">
+    <div class="sheet-title">Choose Difficulty</div>
+    <div class="sheet-sub" id="level-modal-sub">Chapter · Subject</div>
+    <div class="level-cards">
+      <div class="level-card level-basic" onclick="startQuizWithLevel('basic')">
+        <div class="level-icon">🟢</div>
+        <div><div class="level-name">Basic</div><div class="level-desc">Direct recall, NCERT definitions, fundamentals</div></div>
+      </div>
+      <div class="level-card level-inter" onclick="startQuizWithLevel('intermediate')">
+        <div class="level-icon">🟡</div>
+        <div><div class="level-name">Intermediate</div><div class="level-desc">Application-based, moderate numericals</div></div>
+      </div>
+      <div class="level-card level-adv" onclick="startQuizWithLevel('advanced')">
+        <div class="level-icon">🔴</div>
+        <div><div class="level-name">Advanced</div><div class="level-desc">NEET-level tricky, multi-concept problems</div></div>
+      </div>
+    </div>
+    <button class="sheet-cancel" onclick="closeLevelModal()">Cancel</button>
+  </div>
+</div>
+
+<!-- USER MODAL -->
+<div class="modal-overlay hidden" id="user-modal" onclick="if(event.target===this)closeUserModal()">
+  <div class="bottom-sheet">
+    <div class="sheet-title">Your Profile</div>
+    <div class="sheet-sub">Set your name to appear on the leaderboard</div>
+    <input class="user-input" id="username-input" type="text" placeholder="Enter your name…" maxlength="30"/>
+    <button class="user-save-btn" onclick="saveUsername()">Save &amp; Continue</button>
+  </div>
+</div>
+
+<!-- EXIT DIALOG -->
 <div class="dialog-overlay hidden" id="dialog">
   <div class="dialog-box">
     <div class="dialog-title">Exit Quiz?</div>
-    <div class="dialog-body">Your progress will be lost. Are you sure you want to exit?</div>
+    <div class="dialog-body">Your progress for this session will be lost.</div>
     <div class="dialog-actions">
-      <button class="dialog-btn cancel" onclick="closeDialog()">Cancel</button>
-      <button class="dialog-btn confirm" onclick="confirmExit()">Exit</button>
+      <button class="dialog-btn d-cancel" onclick="closeDialog()">Cancel</button>
+      <button class="dialog-btn d-confirm" onclick="confirmExit()">Exit</button>
     </div>
   </div>
 </div>
 
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
 <script>
-// ===================== DATA =====================
-const DATA = {
-  physics: {
-    icon: '⚛️',
-    colorClass: 'card-physics',
-    chapters: {
-      11: [
-        { name: 'Physical World and Measurement', qs: 18, done: 0 },
-        { name: 'Kinematics', qs: 45, done: 0 },
-        { name: 'Laws of Motion', qs: 38, done: 0 },
-        { name: 'Work, Energy and Power', qs: 42, done: 0 },
-        { name: 'Motion of System of Particles', qs: 28, done: 0 },
-        { name: 'Gravitation', qs: 35, done: 0 },
-        { name: 'Properties of Bulk Matter', qs: 30, done: 0 },
-        { name: 'Thermodynamics', qs: 40, done: 0 },
-        { name: 'Behaviour of Perfect Gas', qs: 25, done: 0 },
-        { name: 'Oscillations and Waves', qs: 48, done: 0 },
-      ],
-      12: [
-        { name: 'Electrostatics', qs: 55, done: 0 },
-        { name: 'Current Electricity', qs: 50, done: 0 },
-        { name: 'Magnetic Effects of Current', qs: 45, done: 0 },
-        { name: 'Magnetism and Matter', qs: 30, done: 0 },
-        { name: 'Electromagnetic Induction', qs: 38, done: 0 },
-        { name: 'Alternating Current', qs: 35, done: 0 },
-        { name: 'Electromagnetic Waves', qs: 22, done: 0 },
-        { name: 'Ray Optics', qs: 52, done: 0 },
-        { name: 'Wave Optics', qs: 32, done: 0 },
-        { name: 'Dual Nature of Matter', qs: 28, done: 0 },
-        { name: 'Atoms and Nuclei', qs: 40, done: 0 },
-        { name: 'Electronic Devices', qs: 35, done: 0 },
-      ]
-    }
-  },
-  biology: {
-    icon: '🧬',
-    colorClass: 'card-biology',
-    chapters: {
-      11: [
-        { name: 'The Living World', qs: 22, done: 0 },
-        { name: 'Biological Classification', qs: 40, done: 0 },
-        { name: 'Plant Kingdom', qs: 35, done: 0 },
-        { name: 'Animal Kingdom', qs: 45, done: 0 },
-        { name: 'Morphology of Flowering Plants', qs: 38, done: 0 },
-        { name: 'Anatomy of Flowering Plants', qs: 30, done: 0 },
-        { name: 'Structural Organisation in Animals', qs: 28, done: 0 },
-        { name: 'Cell: The Unit of Life', qs: 42, done: 0 },
-        { name: 'Biomolecules', qs: 48, done: 0 },
-        { name: 'Cell Cycle and Cell Division', qs: 35, done: 0 },
-        { name: 'Transport in Plants', qs: 25, done: 0 },
-        { name: 'Mineral Nutrition', qs: 28, done: 0 },
-        { name: 'Photosynthesis in Higher Plants', qs: 50, done: 0 },
-        { name: 'Respiration in Plants', qs: 35, done: 0 },
-        { name: 'Plant Growth and Development', qs: 30, done: 0 },
-        { name: 'Digestion and Absorption', qs: 38, done: 0 },
-        { name: 'Breathing and Exchange of Gases', qs: 32, done: 0 },
-        { name: 'Body Fluids and Circulation', qs: 40, done: 0 },
-        { name: 'Excretory Products and Elimination', qs: 38, done: 0 },
-        { name: 'Locomotion and Movement', qs: 35, done: 0 },
-        { name: 'Neural Control and Coordination', qs: 45, done: 0 },
-        { name: 'Chemical Coordination', qs: 40, done: 0 },
-      ],
-      12: [
-        { name: 'Reproduction in Organisms', qs: 25, done: 0 },
-        { name: 'Sexual Reproduction in Flowering Plants', qs: 45, done: 0 },
-        { name: 'Human Reproduction', qs: 40, done: 0 },
-        { name: 'Reproductive Health', qs: 28, done: 0 },
-        { name: 'Principles of Inheritance', qs: 55, done: 0 },
-        { name: 'Molecular Basis of Inheritance', qs: 60, done: 0 },
-        { name: 'Evolution', qs: 42, done: 0 },
-        { name: 'Human Health and Disease', qs: 50, done: 0 },
-        { name: 'Strategies for Enhancement in Food Production', qs: 30, done: 0 },
-        { name: 'Microbes in Human Welfare', qs: 35, done: 0 },
-        { name: 'Biotechnology: Principles and Processes', qs: 45, done: 0 },
-        { name: 'Biotechnology and its Applications', qs: 40, done: 0 },
-        { name: 'Organisms and Populations', qs: 35, done: 0 },
-        { name: 'Ecosystem', qs: 38, done: 0 },
-        { name: 'Biodiversity and Conservation', qs: 30, done: 0 },
-        { name: 'Environmental Issues', qs: 25, done: 0 },
-      ]
-    }
-  },
-  chemistry: {
-    icon: '🧪',
-    colorClass: 'card-chemistry',
-    chapters: {
-      11: [
-        { name: 'Some Basic Concepts of Chemistry', qs: 35, done: 0 },
-        { name: 'Structure of Atom', qs: 42, done: 0 },
-        { name: 'Classification of Elements', qs: 38, done: 0 },
-        { name: 'Chemical Bonding and Molecular Structure', qs: 55, done: 0 },
-        { name: 'States of Matter', qs: 30, done: 0 },
-        { name: 'Thermodynamics', qs: 40, done: 0 },
-        { name: 'Equilibrium', qs: 50, done: 0 },
-        { name: 'Redox Reactions', qs: 28, done: 0 },
-        { name: 'Hydrogen', qs: 20, done: 0 },
-        { name: 's-Block Elements', qs: 32, done: 0 },
-        { name: 'p-Block Elements (Group 13 & 14)', qs: 38, done: 0 },
-        { name: 'Organic Chemistry – Basic Principles', qs: 45, done: 0 },
-        { name: 'Hydrocarbons', qs: 42, done: 0 },
-        { name: 'Environmental Chemistry', qs: 18, done: 0 },
-      ],
-      12: [
-        { name: 'The Solid State', qs: 35, done: 0 },
-        { name: 'Solutions', qs: 40, done: 0 },
-        { name: 'Electrochemistry', qs: 45, done: 0 },
-        { name: 'Chemical Kinetics', qs: 38, done: 0 },
-        { name: 'Surface Chemistry', qs: 28, done: 0 },
-        { name: 'd and f Block Elements', qs: 42, done: 0 },
-        { name: 'Coordination Compounds', qs: 50, done: 0 },
-        { name: 'Haloalkanes and Haloarenes', qs: 38, done: 0 },
-        { name: 'Alcohols, Phenols and Ethers', qs: 42, done: 0 },
-        { name: 'Aldehydes, Ketones and Carboxylic Acids', qs: 50, done: 0 },
-        { name: 'Amines', qs: 35, done: 0 },
-        { name: 'Biomolecules', qs: 30, done: 0 },
-        { name: 'Polymers', qs: 25, done: 0 },
-        { name: 'Chemistry in Everyday Life', qs: 22, done: 0 },
-      ]
-    }
-  }
+// ============================================================
+// SUPABASE CONFIG
+// ============================================================
+const SUPABASE_URL = 'https://lfgtrbwlhnfwpunoixxi.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxmZ3RyYndsaG5md3B1bm9peHhpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE0MDY2MTIsImV4cCI6MjA4Njk4MjYxMn0.U11nGQcc6lDazLUkL2DrO9yKUm5XJq9UOrko40MfLik';
+
+const SB_HEADERS = {
+  'apikey': SUPABASE_KEY,
+  'Authorization': 'Bearer ' + SUPABASE_KEY,
+  'Content-Type': 'application/json',
+  'Prefer': 'return=representation'
 };
 
-// ===================== SAMPLE QUESTIONS =====================
-const SAMPLE_QUESTIONS = {
-  physics: [
-    {
-      q: "A body is thrown vertically upward with velocity u. The ratio of the time of ascent to the time of descent is:",
-      opts: ["1 : 1", "1 : 2", "2 : 1", "Depends on u"],
-      ans: 0,
-      expl: "In the absence of air resistance, the time of ascent equals the time of descent due to the symmetry of projectile motion under gravity."
-    },
-    {
-      q: "A particle moves in a circle of radius r with constant speed v. The change in velocity when the particle has gone through half a revolution is:",
-      opts: ["Zero", "2v", "v/2", "πv"],
-      ans: 1,
-      expl: "When a particle completes half a revolution, its velocity reverses direction. The change in velocity = v − (−v) = 2v."
-    },
-    {
-      q: "Newton's first law of motion gives the concept of:",
-      opts: ["Energy", "Work", "Inertia", "Momentum"],
-      ans: 2,
-      expl: "Newton's first law states that a body continues in its state of rest or motion unless acted upon by an external force — this property is called inertia."
-    },
-    {
-      q: "The escape velocity from the surface of Earth is approximately:",
-      opts: ["7.9 km/s", "11.2 km/s", "6.4 km/s", "9.8 km/s"],
-      ans: 1,
-      expl: "The escape velocity from Earth's surface is 11.2 km/s, calculated using v = √(2gR), where g = 9.8 m/s² and R = 6400 km."
-    },
-    {
-      q: "In a Young's double slit experiment, the slit separation is doubled. The fringe width will:",
-      opts: ["Remain same", "Become half", "Become double", "Become four times"],
-      ans: 1,
-      expl: "Fringe width β = λD/d. If d is doubled, β becomes half. Hence the fringe width is halved."
-    },
-    {
-      q: "The SI unit of electric flux is:",
-      opts: ["N/C", "N·m²/C", "C/m²", "V/m"],
-      ans: 1,
-      expl: "Electric flux Φ = E·A·cosθ. Its SI unit is N·m²/C (or equivalently V·m)."
-    },
-    {
-      q: "Which of the following does NOT emit radiation?",
-      opts: ["α particle", "β particle", "γ ray", "X-ray"],
-      ans: 3,
-      expl: "α particles, β particles, and γ rays are nuclear radiations. X-rays are electromagnetic radiation produced outside the nucleus (via electron transitions)."
-    },
-    {
-      q: "Ohm's law is valid for:",
-      opts: ["Semiconductors only", "Metallic conductors at constant temperature", "All materials", "Electrolytes only"],
-      ans: 1,
-      expl: "Ohm's law (V = IR) is strictly valid for metallic conductors at constant temperature, where resistance remains constant."
-    },
+async function sbGet(table, query = '') {
+  const r = await fetch(`${SUPABASE_URL}/rest/v1/${table}${query}`, { headers: SB_HEADERS });
+  if (!r.ok) throw new Error(`GET ${table}: ${await r.text()}`);
+  return r.json();
+}
+
+async function sbPost(table, body) {
+  const r = await fetch(`${SUPABASE_URL}/rest/v1/${table}`, { method:'POST', headers: SB_HEADERS, body: JSON.stringify(body) });
+  if (!r.ok) throw new Error(`POST ${table}: ${await r.text()}`);
+  return r.json();
+}
+
+async function sbPatch(table, query, body) {
+  const r = await fetch(`${SUPABASE_URL}/rest/v1/${table}${query}`, { method:'PATCH', headers: SB_HEADERS, body: JSON.stringify(body) });
+  if (!r.ok) throw new Error(`PATCH ${table}: ${await r.text()}`);
+  return r.json();
+}
+
+// ============================================================
+// CHAPTER DATA
+// ============================================================
+const DATA = {
+  physics:{icon:'⚛️',chapters:{
+    11:[
+      {name:'Physical World and Measurement',qs:18,done:0},{name:'Kinematics',qs:45,done:0},
+      {name:'Laws of Motion',qs:38,done:0},{name:'Work, Energy and Power',qs:42,done:0},
+      {name:'Motion of System of Particles',qs:28,done:0},{name:'Gravitation',qs:35,done:0},
+      {name:'Properties of Bulk Matter',qs:30,done:0},{name:'Thermodynamics',qs:40,done:0},
+      {name:'Behaviour of Perfect Gas',qs:25,done:0},{name:'Oscillations and Waves',qs:48,done:0},
+    ],
+    12:[
+      {name:'Electrostatics',qs:55,done:0},{name:'Current Electricity',qs:50,done:0},
+      {name:'Magnetic Effects of Current',qs:45,done:0},{name:'Magnetism and Matter',qs:30,done:0},
+      {name:'Electromagnetic Induction',qs:38,done:0},{name:'Alternating Current',qs:35,done:0},
+      {name:'Electromagnetic Waves',qs:22,done:0},{name:'Ray Optics',qs:52,done:0},
+      {name:'Wave Optics',qs:32,done:0},{name:'Dual Nature of Matter',qs:28,done:0},
+      {name:'Atoms and Nuclei',qs:40,done:0},{name:'Electronic Devices',qs:35,done:0},
+    ]
+  }},
+  biology:{icon:'🧬',chapters:{
+    11:[
+      {name:'The Living World',qs:22,done:0},{name:'Biological Classification',qs:40,done:0},
+      {name:'Plant Kingdom',qs:35,done:0},{name:'Animal Kingdom',qs:45,done:0},
+      {name:'Morphology of Flowering Plants',qs:38,done:0},{name:'Anatomy of Flowering Plants',qs:30,done:0},
+      {name:'Structural Organisation in Animals',qs:28,done:0},{name:'Cell: The Unit of Life',qs:42,done:0},
+      {name:'Biomolecules',qs:48,done:0},{name:'Cell Cycle and Cell Division',qs:35,done:0},
+      {name:'Transport in Plants',qs:25,done:0},{name:'Mineral Nutrition',qs:28,done:0},
+      {name:'Photosynthesis in Higher Plants',qs:50,done:0},{name:'Respiration in Plants',qs:35,done:0},
+      {name:'Plant Growth and Development',qs:30,done:0},{name:'Digestion and Absorption',qs:38,done:0},
+      {name:'Breathing and Exchange of Gases',qs:32,done:0},{name:'Body Fluids and Circulation',qs:40,done:0},
+      {name:'Excretory Products and Elimination',qs:38,done:0},{name:'Locomotion and Movement',qs:35,done:0},
+      {name:'Neural Control and Coordination',qs:45,done:0},{name:'Chemical Coordination',qs:40,done:0},
+    ],
+    12:[
+      {name:'Reproduction in Organisms',qs:25,done:0},{name:'Sexual Reproduction in Flowering Plants',qs:45,done:0},
+      {name:'Human Reproduction',qs:40,done:0},{name:'Reproductive Health',qs:28,done:0},
+      {name:'Principles of Inheritance',qs:55,done:0},{name:'Molecular Basis of Inheritance',qs:60,done:0},
+      {name:'Evolution',qs:42,done:0},{name:'Human Health and Disease',qs:50,done:0},
+      {name:'Strategies for Enhancement in Food Production',qs:30,done:0},{name:'Microbes in Human Welfare',qs:35,done:0},
+      {name:'Biotechnology: Principles and Processes',qs:45,done:0},{name:'Biotechnology and its Applications',qs:40,done:0},
+      {name:'Organisms and Populations',qs:35,done:0},{name:'Ecosystem',qs:38,done:0},
+      {name:'Biodiversity and Conservation',qs:30,done:0},{name:'Environmental Issues',qs:25,done:0},
+    ]
+  }},
+  chemistry:{icon:'🧪',chapters:{
+    11:[
+      {name:'Some Basic Concepts of Chemistry',qs:35,done:0},{name:'Structure of Atom',qs:42,done:0},
+      {name:'Classification of Elements',qs:38,done:0},{name:'Chemical Bonding and Molecular Structure',qs:55,done:0},
+      {name:'States of Matter',qs:30,done:0},{name:'Thermodynamics',qs:40,done:0},
+      {name:'Equilibrium',qs:50,done:0},{name:'Redox Reactions',qs:28,done:0},
+      {name:'Hydrogen',qs:20,done:0},{name:'s-Block Elements',qs:32,done:0},
+      {name:'p-Block Elements (Group 13 & 14)',qs:38,done:0},{name:'Organic Chemistry – Basic Principles',qs:45,done:0},
+      {name:'Hydrocarbons',qs:42,done:0},{name:'Environmental Chemistry',qs:18,done:0},
+    ],
+    12:[
+      {name:'The Solid State',qs:35,done:0},{name:'Solutions',qs:40,done:0},
+      {name:'Electrochemistry',qs:45,done:0},{name:'Chemical Kinetics',qs:38,done:0},
+      {name:'Surface Chemistry',qs:28,done:0},{name:'d and f Block Elements',qs:42,done:0},
+      {name:'Coordination Compounds',qs:50,done:0},{name:'Haloalkanes and Haloarenes',qs:38,done:0},
+      {name:'Alcohols, Phenols and Ethers',qs:42,done:0},{name:'Aldehydes, Ketones and Carboxylic Acids',qs:50,done:0},
+      {name:'Amines',qs:35,done:0},{name:'Biomolecules',qs:30,done:0},
+      {name:'Polymers',qs:25,done:0},{name:'Chemistry in Everyday Life',qs:22,done:0},
+    ]
+  }}
+};
+
+// ============================================================
+// FALLBACK QUESTIONS (used when DB has no questions for a chapter/level)
+// ============================================================
+const FALLBACK = {
+  physics:[
+    {q:"Newton's first law of motion gives the concept of:",opts:["Energy","Work","Inertia","Momentum"],ans:2,expl:"Newton's first law: a body continues in its state unless acted upon by external force — this property is inertia."},
+    {q:"Escape velocity from Earth's surface is approximately:",opts:["7.9 km/s","11.2 km/s","6.4 km/s","9.8 km/s"],ans:1,expl:"Escape velocity = √(2gR) ≈ 11.2 km/s where g=9.8 m/s², R=6400 km."},
+    {q:"SI unit of electric flux is:",opts:["N/C","N·m²/C","C/m²","V/m"],ans:1,expl:"Φ = E·A·cosθ → SI unit is N·m²/C (also V·m)."},
+    {q:"Ohm's law (V=IR) is valid for:",opts:["Semiconductors only","Metallic conductors at constant temperature","All materials","Electrolytes only"],ans:1,expl:"Ohm's law is valid for metallic conductors at constant temperature where resistance is constant."},
+    {q:"A particle in circular motion of radius r with speed v. Change in velocity after half revolution:",opts:["Zero","2v","v/2","πv"],ans:1,expl:"After half revolution velocity reverses: Δv = v−(−v) = 2v."},
+    {q:"In Young's double slit experiment slit separation doubled. Fringe width will:",opts:["Remain same","Become half","Become double","Become four times"],ans:1,expl:"β = λD/d. If d doubles, β halves."},
+    {q:"Half-life of radioactive substance is 30 min. After 90 min, fraction remaining is:",opts:["1/2","1/4","1/8","1/16"],ans:2,expl:"90 min = 3 half-lives → (1/2)³ = 1/8."},
+    {q:"Energy stored in a capacitor of capacitance C charged to voltage V is:",opts:["CV","½CV²","CV²","2CV²"],ans:1,expl:"Energy stored = ½CV²."},
   ],
-  biology: [
-    {
-      q: "The process by which glucose is broken down in the absence of oxygen is called:",
-      opts: ["Aerobic respiration", "Fermentation", "Photosynthesis", "Transpiration"],
-      ans: 1,
-      expl: "Fermentation (anaerobic respiration) is the breakdown of glucose in the absence of oxygen, producing ethanol/lactic acid + CO₂ + small amount of ATP."
-    },
-    {
-      q: "Which organelle is called the 'powerhouse of the cell'?",
-      opts: ["Ribosome", "Lysosome", "Mitochondria", "Golgi apparatus"],
-      ans: 2,
-      expl: "Mitochondria are called the powerhouse of the cell because they produce ATP through the process of cellular respiration (oxidative phosphorylation)."
-    },
-    {
-      q: "The law of segregation was proposed by:",
-      opts: ["Darwin", "Lamarck", "Mendel", "Morgan"],
-      ans: 2,
-      expl: "Gregor Mendel proposed the Law of Segregation (First Law) stating that alleles separate during gamete formation and each gamete carries only one allele."
-    },
-    {
-      q: "DNA replication is said to be semiconservative because:",
-      opts: ["Only one strand is synthesised", "Each new DNA molecule has one old and one new strand", "Both strands are new", "DNA replicates twice"],
-      ans: 1,
-      expl: "In semiconservative replication (proved by Meselson-Stahl experiment), each daughter DNA molecule retains one original (parental) strand and one newly synthesised strand."
-    },
-    {
-      q: "Which blood group is called the 'universal donor'?",
-      opts: ["A", "B", "AB", "O"],
-      ans: 3,
-      expl: "Blood group O (negative) is the universal donor for red blood cells because it lacks A, B antigens and Rh factor, minimising rejection."
-    },
-    {
-      q: "Photosynthesis occurs in which part of the chloroplast?",
-      opts: ["Outer membrane", "Stroma and grana", "Cytosol", "Nucleus"],
-      ans: 1,
-      expl: "Light reactions occur in the grana (thylakoid membranes) while the Calvin cycle (dark reactions) occurs in the stroma of chloroplasts."
-    },
-    {
-      q: "Which hormone is responsible for the 'fight or flight' response?",
-      opts: ["Insulin", "Thyroxine", "Adrenaline (Epinephrine)", "Glucagon"],
-      ans: 2,
-      expl: "Adrenaline (epinephrine), secreted by the adrenal medulla, triggers the fight or flight response — increasing heart rate, blood pressure, and blood glucose."
-    },
-    {
-      q: "The functional unit of kidney is:",
-      opts: ["Nephron", "Neuron", "Villus", "Glomerulus"],
-      ans: 0,
-      expl: "The nephron is the structural and functional unit of the kidney, responsible for filtration, reabsorption, secretion, and excretion to form urine."
-    },
+  biology:[
+    {q:"Glucose breakdown without oxygen is called:",opts:["Aerobic respiration","Fermentation","Photosynthesis","Transpiration"],ans:1,expl:"Fermentation (anaerobic) breaks down glucose without oxygen."},
+    {q:"'Powerhouse of the cell' is:",opts:["Ribosome","Lysosome","Mitochondria","Golgi apparatus"],ans:2,expl:"Mitochondria produce ATP via oxidative phosphorylation."},
+    {q:"DNA replication is semiconservative because:",opts:["Only one strand synthesised","Each daughter DNA has one old and one new strand","Both strands are new","DNA replicates twice"],ans:1,expl:"Meselson-Stahl proved each daughter DNA retains one parental strand."},
+    {q:"Universal donor blood group is:",opts:["A","B","AB","O"],ans:3,expl:"Blood group O lacks A and B antigens, minimising rejection."},
+    {q:"Functional unit of kidney is:",opts:["Nephron","Neuron","Villus","Glomerulus"],ans:0,expl:"The nephron is the structural and functional unit of the kidney."},
+    {q:"Fight or flight response hormone:",opts:["Insulin","Thyroxine","Adrenaline","Glucagon"],ans:2,expl:"Adrenaline (epinephrine) from adrenal medulla triggers fight-or-flight."},
+    {q:"Light reactions of photosynthesis occur in:",opts:["Stroma","Grana (thylakoid membranes)","Cytosol","Nucleus"],ans:1,expl:"Light reactions occur in thylakoid membranes (grana) of chloroplasts."},
+    {q:"Law of segregation was proposed by:",opts:["Darwin","Lamarck","Mendel","Morgan"],ans:2,expl:"Gregor Mendel proposed the Law of Segregation."},
   ],
-  chemistry: [
-    {
-      q: "The hybridisation of carbon in methane (CH₄) is:",
-      opts: ["sp", "sp²", "sp³", "sp³d"],
-      ans: 2,
-      expl: "In CH₄, carbon forms 4 sigma bonds using sp³ hybridisation, giving a tetrahedral geometry with bond angle of 109.5°."
-    },
-    {
-      q: "Which of the following has the highest electronegativity?",
-      opts: ["Oxygen", "Nitrogen", "Fluorine", "Chlorine"],
-      ans: 2,
-      expl: "Fluorine has the highest electronegativity (3.98 on Pauling scale) among all elements due to its small size and high nuclear charge."
-    },
-    {
-      q: "The rate constant of a first-order reaction has units of:",
-      opts: ["mol·L⁻¹·s⁻¹", "L·mol⁻¹·s⁻¹", "s⁻¹", "mol·L⁻¹"],
-      ans: 2,
-      expl: "For a first-order reaction, rate = k[A], so k = rate/[A] = (mol·L⁻¹·s⁻¹)/(mol·L⁻¹) = s⁻¹."
-    },
-    {
-      q: "The IUPAC name of CH₃-CH(OH)-CH₃ is:",
-      opts: ["1-propanol", "2-propanol", "Propanal", "Propanone"],
-      ans: 1,
-      expl: "The OH group is on the second carbon of propane, making it 2-propanol (propan-2-ol), also commonly known as isopropanol."
-    },
-    {
-      q: "Which of the following is a lyophilic colloid?",
-      opts: ["Gold sol", "Starch sol", "Arsenic sulphide sol", "Ferric hydroxide sol"],
-      ans: 1,
-      expl: "Starch sol is lyophilic (solvent-loving) as it readily disperses in water. Lyophilic colloids are more stable and reversible."
-    },
-    {
-      q: "The oxidation number of Mn in KMnO₄ is:",
-      opts: ["+5", "+6", "+7", "+4"],
-      ans: 2,
-      expl: "In KMnO₄: K = +1, O = −2, so: +1 + x + 4(−2) = 0 → x − 7 = 0 → x = +7. Manganese has oxidation number +7."
-    },
-    {
-      q: "Which law states that equal volumes of all gases at the same temperature and pressure contain equal number of molecules?",
-      opts: ["Boyle's Law", "Charles' Law", "Avogadro's Law", "Graham's Law"],
-      ans: 2,
-      expl: "Avogadro's Law states that equal volumes of gases at the same T and P contain the same number of molecules, regardless of their chemical nature."
-    },
-    {
-      q: "The reaction of an acid with an alcohol to form ester is called:",
-      opts: ["Saponification", "Esterification", "Hydrolysis", "Condensation"],
-      ans: 1,
-      expl: "Esterification is the reaction between a carboxylic acid and an alcohol (in the presence of H₂SO₄ catalyst) to form an ester and water."
-    },
+  chemistry:[
+    {q:"Hybridisation of carbon in CH₄ is:",opts:["sp","sp²","sp³","sp³d"],ans:2,expl:"CH₄: sp³ hybridisation, tetrahedral geometry, bond angle 109.5°."},
+    {q:"Highest electronegativity among elements:",opts:["Oxygen","Nitrogen","Fluorine","Chlorine"],ans:2,expl:"Fluorine has highest electronegativity (3.98 on Pauling scale)."},
+    {q:"Rate constant of first-order reaction has units:",opts:["mol·L⁻¹·s⁻¹","L·mol⁻¹·s⁻¹","s⁻¹","mol·L⁻¹"],ans:2,expl:"For first-order: k = rate/[A] = s⁻¹."},
+    {q:"Oxidation number of Mn in KMnO₄:",opts:["+5","+6","+7","+4"],ans:2,expl:"+1+x+4(−2)=0 → x=+7."},
+    {q:"Avogadro's law: equal volumes of gases at same T and P contain:",opts:["Same mass","Same number of molecules","Same number of atoms","Same density"],ans:1,expl:"Avogadro: equal volumes → equal number of molecules."},
+    {q:"IUPAC name of CH₃-CH(OH)-CH₃:",opts:["1-propanol","2-propanol","Propanal","Propanone"],ans:1,expl:"OH on 2nd carbon of propane → propan-2-ol (2-propanol)."},
+    {q:"Esterification is reaction between:",opts:["Acid + Base","Carboxylic acid + Alcohol","Alcohol + Base","Aldehyde + Alcohol"],ans:1,expl:"Esterification: carboxylic acid + alcohol → ester + water."},
+    {q:"Which is a lyophilic colloid?",opts:["Gold sol","Starch sol","Arsenic sulphide sol","Ferric hydroxide sol"],ans:1,expl:"Starch sol is lyophilic (solvent-loving), stable and reversible."},
   ]
 };
 
-// ===================== STATE =====================
+// ============================================================
+// APP STATE
+// ============================================================
 let currentSubject = null;
 let currentTab = 11;
+let currentChapterName = '';
+let currentChapterIndex = 0;
+let currentLevel = 'basic';
 let currentQuestions = [];
 let currentQIndex = 0;
-let score = 0;
-let correctCount = 0;
-let wrongCount = 0;
-let skipCount = 0;
+let score = 0, correctCount = 0, wrongCount = 0, skipCount = 0;
 let userAnswers = [];
-let currentChapterName = '';
-let quizCompleted = false;
 
-// ===================== SPLASH =====================
-function getGreeting() {
-  const h = new Date().getHours();
-  if (h < 12) return 'Good Morning, Explorer! 👋';
-  if (h < 17) return 'Good Afternoon, Explorer! 👋';
-  return 'Good Evening, Explorer! 👋';
-}
+// User identity (persisted in localStorage)
+let userId = localStorage.getItem('ss_uid') || (() => { const id='u_'+Math.random().toString(36).substr(2,12); localStorage.setItem('ss_uid',id); return id; })();
+let username = localStorage.getItem('ss_uname') || '';
 
+// ============================================================
+// SPLASH + INIT
+// ============================================================
 window.addEventListener('load', () => {
-  document.getElementById('greeting').textContent = getGreeting();
+  const h = new Date().getHours();
+  document.getElementById('greeting').textContent = h<12?'Good Morning! 👋':h<17?'Good Afternoon! 👋':'Good Evening! 👋';
+  updateUserBtn();
   setTimeout(() => {
-    const splash = document.getElementById('splash');
-    splash.classList.add('fade-out');
-    setTimeout(() => {
-      splash.remove();
-      const app = document.getElementById('app');
-      app.classList.add('visible');
-    }, 400);
+    const s = document.getElementById('splash');
+    s.classList.add('fade-out');
+    setTimeout(() => { s.remove(); document.getElementById('app').classList.add('visible'); if(!username) setTimeout(openUserModal,800); }, 400);
   }, 2900);
 });
 
-// ===================== NAVIGATION =====================
-function showScreen(id) {
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  document.getElementById('screen-' + id).classList.add('active');
+// ============================================================
+// USER PROFILE
+// ============================================================
+function updateUserBtn() {
+  document.getElementById('user-btn').textContent = username ? `👤 ${username}` : '👤 Set Name';
+}
+function openUserModal() {
+  document.getElementById('username-input').value = username || '';
+  document.getElementById('user-modal').classList.remove('hidden');
+}
+function closeUserModal() { document.getElementById('user-modal').classList.add('hidden'); }
+function saveUsername() {
+  const v = document.getElementById('username-input').value.trim();
+  if (!v) { showToast('Please enter a name','err'); return; }
+  username = v; localStorage.setItem('ss_uname', username);
+  updateUserBtn(); closeUserModal(); showToast('✅ Name saved!','ok');
 }
 
+// ============================================================
+// NAVIGATION
+// ============================================================
+function showScreen(id) { document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active')); document.getElementById('screen-'+id).classList.add('active'); }
 function goHome() { showScreen('home'); }
 function goTopics() { showScreen('topics'); }
-function backToResults() { showScreen('results'); }
 
-function openSubject(subject) {
-  currentSubject = subject;
-  const d = DATA[subject];
-  document.getElementById('topic-subject-name').textContent = subject.charAt(0).toUpperCase() + subject.slice(1);
-  document.getElementById('topic-subject-icon').textContent = d.icon;
+function openSubject(sub) {
+  currentSubject = sub;
+  document.getElementById('topic-subject-name').textContent = sub.charAt(0).toUpperCase()+sub.slice(1);
+  document.getElementById('topic-icon').textContent = DATA[sub].icon;
   currentTab = 11;
-  renderChapterList();
+  document.getElementById('tab-11').classList.add('active');
+  document.getElementById('tab-12').classList.remove('active');
+  renderChapters();
   showScreen('topics');
 }
 
 function switchTab(cls) {
   currentTab = cls;
-  document.getElementById('tab-11').classList.toggle('active', cls === 11);
-  document.getElementById('tab-12').classList.toggle('active', cls === 12);
-  renderChapterList();
+  document.getElementById('tab-11').classList.toggle('active', cls===11);
+  document.getElementById('tab-12').classList.toggle('active', cls===12);
+  renderChapters();
 }
 
-function renderChapterList() {
-  const chapters = DATA[currentSubject].chapters[currentTab];
-  const colors = { physics: '#1A3E8C', biology: '#1A6B3C', chemistry: '#7A2A0A' };
-  const color = colors[currentSubject];
-  const list = document.getElementById('chapter-list');
-  list.innerHTML = chapters.map((ch, i) => {
-    const pct = Math.round((ch.done / ch.qs) * 100);
-    return `
-      <div class="chapter-card" style="border-left-color:${color}">
-        <div class="chapter-num" style="background:linear-gradient(135deg,${color}dd,${color}99)">${currentTab === 11 ? i+1 : i+1}</div>
-        <div class="chapter-info">
-          <div class="chapter-name">${ch.name}</div>
-          <div class="chapter-sub">${ch.qs} questions${ch.done > 0 ? ` · ${ch.done} attempted` : ''}</div>
-          <div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:${pct}%"></div></div>
-        </div>
-        <button class="start-btn" onclick="startQuiz('${currentSubject}',${i},'${ch.name.replace(/'/g,"\\'")}')">Start</button>
-      </div>`;
+function renderChapters() {
+  const chs = DATA[currentSubject].chapters[currentTab];
+  const col = {physics:'#1A3E8C',biology:'#1A6B3C',chemistry:'#7A2A0A'}[currentSubject];
+  document.getElementById('chapter-list').innerHTML = chs.map((ch,i) => {
+    const pct = Math.round((ch.done/ch.qs)*100);
+    return `<div class="chapter-card" style="border-left-color:${col}">
+      <div class="chapter-num" style="background:linear-gradient(135deg,${col}dd,${col}99)">${i+1}</div>
+      <div class="chapter-info">
+        <div class="chapter-name">${ch.name}</div>
+        <div class="chapter-sub">${ch.qs} questions · Basic / Intermediate / Advanced</div>
+        <div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:${pct}%"></div></div>
+      </div>
+      <button class="start-btn" onclick="openLevelModal(${i},'${ch.name.replace(/'/g,"\\'")}')">Start ↗</button>
+    </div>`;
   }).join('');
 }
 
-// ===================== QUIZ =====================
-function startQuiz(subject, chIndex, chName) {
-  currentSubject = subject;
-  currentChapterName = chName;
-  const qs = SAMPLE_QUESTIONS[subject];
-  currentQuestions = shuffleArray([...qs]).slice(0, Math.min(8, qs.length));
-  currentQIndex = 0;
-  score = 0;
-  correctCount = 0;
-  wrongCount = 0;
-  skipCount = 0;
-  userAnswers = new Array(currentQuestions.length).fill(null);
-  quizCompleted = false;
-
-  document.getElementById('quiz-chapter-name').textContent = chName;
-  document.getElementById('score-pill').textContent = 'Score: 0';
-  updateProgress();
-  renderQuestion();
-  showScreen('quiz');
+// ============================================================
+// LEVEL MODAL
+// ============================================================
+function openLevelModal(idx, name) {
+  currentChapterIndex = idx; currentChapterName = name;
+  document.getElementById('level-modal-sub').textContent = `${name} · ${currentSubject.charAt(0).toUpperCase()+currentSubject.slice(1)}`;
+  document.getElementById('level-modal').classList.remove('hidden');
 }
+function closeLevelModal() { document.getElementById('level-modal').classList.add('hidden'); }
 
-function shuffleArray(arr) {
-  for (let i = arr.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [arr[i], arr[j]] = [arr[j], arr[i]];
+// ============================================================
+// QUIZ FLOW
+// ============================================================
+async function startQuizWithLevel(level) {
+  closeLevelModal(); currentLevel = level;
+  document.getElementById('loading-text').textContent = `Loading ${level} questions…`;
+  document.getElementById('loading-sub').textContent = currentChapterName;
+  showScreen('loading');
+
+  let qs = await fetchFromDB(currentSubject, currentChapterName, level);
+  if (!qs || qs.length === 0) {
+    qs = shuffle([...FALLBACK[currentSubject]]).slice(0,8).map(q=>({...q,level}));
+    showToast('💡 Sample questions loaded — add yours to Supabase!','ok');
   }
-  return arr;
+
+  currentQuestions = qs; currentQIndex = 0;
+  score = 0; correctCount = 0; wrongCount = 0; skipCount = 0;
+  userAnswers = new Array(qs.length).fill(null);
+
+  const pillCls = {basic:'pill-basic',intermediate:'pill-inter',advanced:'pill-adv'}[level];
+  document.getElementById('quiz-title').textContent = currentChapterName;
+  const pill = document.getElementById('level-pill');
+  pill.textContent = level.charAt(0).toUpperCase()+level.slice(1);
+  pill.className = 'level-pill '+pillCls;
+  document.getElementById('score-pill').textContent = 'Score: 0';
+  renderQ(); showScreen('quiz');
 }
 
-function updateProgress() {
-  const pct = (currentQIndex / currentQuestions.length) * 100;
-  document.getElementById('quiz-progress').style.width = pct + '%';
-  document.getElementById('quiz-counter').textContent = `Q ${currentQIndex + 1} / ${currentQuestions.length}`;
+async function fetchFromDB(subject, chapter, level) {
+  try {
+    const enc = encodeURIComponent(chapter);
+    const data = await sbGet('questions', `?subject=eq.${subject}&chapter=eq.${enc}&level=eq.${level}&limit=20`);
+    return shuffle(data).slice(0, Math.min(10, data.length));
+  } catch(e) { console.warn('DB fetch failed:', e.message); return null; }
 }
 
-function renderQuestion() {
+function shuffle(a) {
+  for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;
+}
+
+function renderQ() {
   const q = currentQuestions[currentQIndex];
-  const letters = ['A', 'B', 'C', 'D'];
-  updateProgress();
-
+  const L = ['A','B','C','D'];
+  const pct = (currentQIndex/currentQuestions.length)*100;
+  document.getElementById('quiz-progress').style.width = pct+'%';
+  document.getElementById('quiz-counter').textContent = `Q ${currentQIndex+1} / ${currentQuestions.length}`;
   document.getElementById('quiz-content').innerHTML = `
     <div class="question-card">
-      <div class="q-num">QUESTION ${currentQIndex + 1}</div>
+      <div class="q-num">QUESTION ${currentQIndex+1}</div>
       <div class="q-text">${q.q}</div>
     </div>
-    <div class="options-list" id="options-list">
-      ${q.opts.map((opt, i) => `
-        <button class="option-btn" id="opt-${i}" onclick="selectOption(${i})">
-          <div class="option-letter">${letters[i]}</div>
-          <div class="option-text">${opt}</div>
-        </button>`).join('')}
+    <div class="options-list" id="opts">
+      ${q.opts.map((o,i)=>`<button class="opt-btn" id="o${i}" onclick="pick(${i})"><div class="opt-letter">${L[i]}</div><div class="opt-text">${o}</div></button>`).join('')}
     </div>
-    <div id="feedback-area"></div>
-  `;
+    <div id="fb"></div>`;
 }
 
-function selectOption(selected) {
+function pick(sel) {
   const q = currentQuestions[currentQIndex];
-  const letters = ['A', 'B', 'C', 'D'];
-  userAnswers[currentQIndex] = selected;
-
-  // Disable all
-  document.querySelectorAll('.option-btn').forEach(b => b.disabled = true);
-
-  const isCorrect = selected === q.ans;
-  const selBtn = document.getElementById('opt-' + selected);
-  const corrBtn = document.getElementById('opt-' + q.ans);
-
-  if (isCorrect) {
-    selBtn.classList.add('correct');
-    selBtn.querySelector('.option-letter').textContent = '✓';
-    score += 4;
-    correctCount++;
-    animateScorePill(true);
-  } else {
-    selBtn.classList.add('wrong');
-    selBtn.querySelector('.option-letter').textContent = '✗';
-    corrBtn.classList.add('revealed');
-    corrBtn.querySelector('.option-letter').textContent = '✓';
-    score -= 1;
-    wrongCount++;
-    animateScorePill(false);
-  }
-
+  const L = ['A','B','C','D'];
+  userAnswers[currentQIndex] = sel;
+  document.querySelectorAll('.opt-btn').forEach(b=>b.disabled=true);
+  const ok = sel === q.ans;
+  document.getElementById('o'+sel).classList.add(ok?'correct':'wrong');
+  document.getElementById('o'+sel).querySelector('.opt-letter').textContent = ok?'✓':'✗';
+  if (!ok) { document.getElementById('o'+q.ans).classList.add('revealed'); document.getElementById('o'+q.ans).querySelector('.opt-letter').textContent='✓'; }
+  if (ok){score+=4;correctCount++;}else{score-=1;wrongCount++;}
   document.getElementById('score-pill').textContent = `Score: ${score}`;
-
-  const fb = document.getElementById('feedback-area');
-  fb.innerHTML = `
-    <div class="feedback-badge ${isCorrect ? 'correct' : 'wrong'}">
-      ${isCorrect ? '✅ Correct! +4 points' : `❌ Wrong! −1 point. Correct: (${letters[q.ans]}) ${q.opts[q.ans]}`}
-    </div>
-    <button class="next-btn" onclick="nextQuestion()">
-      ${currentQIndex < currentQuestions.length - 1 ? 'Next Question →' : '📊 See Results'}
-    </button>
-  `;
-}
-
-function animateScorePill(correct) {
   const pill = document.getElementById('score-pill');
-  pill.classList.remove('animate', 'shake');
-  void pill.offsetWidth;
-  pill.classList.add(correct ? 'animate' : 'shake');
+  pill.classList.remove('pop','shake'); void pill.offsetWidth; pill.classList.add(ok?'pop':'shake');
+  document.getElementById('fb').innerHTML = `
+    <div class="feedback ${ok?'correct':'wrong'}">${ok?'✅ Correct! +4 points':`❌ Wrong! −1 pt · Correct: (${L[q.ans]}) ${q.opts[q.ans]}`}</div>
+    <div class="expl-box"><div class="expl-label">📘 NCERT EXPLANATION</div><div class="expl-text">${q.expl}</div></div>
+    <button class="next-btn" onclick="nextQ()">${currentQIndex<currentQuestions.length-1?'Next Question →':'📊 See Results'}</button>`;
 }
 
-function nextQuestion() {
-  if (currentQIndex < currentQuestions.length - 1) {
-    currentQIndex++;
-    renderQuestion();
-  } else {
-    showResults();
-  }
+function nextQ() {
+  if (currentQIndex < currentQuestions.length-1){currentQIndex++;renderQ();}
+  else showResults();
 }
 
-// ===================== RESULTS =====================
-function showResults() {
+// ============================================================
+// RESULTS
+// ============================================================
+async function showResults() {
   const total = currentQuestions.length;
-  skipCount = userAnswers.filter(a => a === null).length;
-  const neetScore = (correctCount * 4) - (wrongCount * 1);
-  const maxNeet = total * 4;
-  const pct = Math.round((correctCount / total) * 100);
+  skipCount = userAnswers.filter(a=>a===null).length;
+  const ns = (correctCount*4)-(wrongCount*1);
+  const maxNs = total*4;
+  const pct = Math.round((correctCount/total)*100);
 
   document.getElementById('r-correct').textContent = correctCount;
   document.getElementById('r-wrong').textContent = wrongCount;
   document.getElementById('r-skip').textContent = skipCount;
   document.getElementById('r-total').textContent = total;
-  document.getElementById('r-neet').textContent = neetScore;
-  document.getElementById('r-max-neet').textContent = `/ ${maxNeet} maximum`;
+  document.getElementById('r-neet').textContent = ns;
+  document.getElementById('r-max').textContent = `/ ${maxNs} maximum`;
 
-  // Performance badge
-  const badge = document.getElementById('perf-badge');
-  badge.className = 'perf-badge';
-  if (pct >= 80) { badge.classList.add('perf-excellent'); badge.textContent = '🏆 Excellent!'; }
-  else if (pct >= 50) { badge.classList.add('perf-good'); badge.textContent = '👍 Good Job!'; }
-  else { badge.classList.add('perf-practice'); badge.textContent = '📚 Keep Practising'; }
+  const b = document.getElementById('perf-badge'); b.className='perf-badge';
+  if(pct>=80){b.classList.add('perf-excellent');b.textContent='🏆 Excellent!';}
+  else if(pct>=50){b.classList.add('perf-good');b.textContent='👍 Good Job!';}
+  else{b.classList.add('perf-practice');b.textContent='📚 Keep Practising';}
+
+  // Reset result buttons for regular quiz context
+  document.getElementById('result-btns-wrap').innerHTML = `
+    <button class="result-btn primary" onclick="retryChapter()">🔄 Retry Chapter</button>
+    <button class="result-btn secondary" onclick="reviewAnswers()">📖 Review Answers</button>
+    <button class="result-btn secondary" onclick="goTopics()">📚 Choose Another Chapter</button>
+    <button class="result-btn secondary" onclick="openLeaderboard()">🏆 View Leaderboard</button>`;
 
   showScreen('results');
 
-  // Count-up animation
-  let current = 0;
-  const target = neetScore;
-  const el = document.getElementById('result-score-display');
-  const step = Math.ceil(Math.abs(target) / 40) || 1;
-  const interval = setInterval(() => {
-    if (Math.abs(current - target) <= step) { current = target; clearInterval(interval); }
-    else { current += (target > 0 ? step : -step); }
-    el.textContent = current;
-  }, 28);
+  // Animate score
+  let cur=0; const el=document.getElementById('score-display');
+  const step=Math.ceil(Math.abs(ns)/40)||1;
+  const iv=setInterval(()=>{if(Math.abs(cur-ns)<=step){cur=ns;clearInterval(iv);}else cur+=(ns>0?step:-step);el.textContent=cur;},28);
+  setTimeout(()=>{document.getElementById('score-arc').style.strokeDashoffset=502*(1-pct/100);},100);
 
-  // Animate ring
-  const arc = pct / 100;
-  setTimeout(() => {
-    document.getElementById('score-ring-arc').style.strokeDashoffset = 502 * (1 - arc);
-  }, 100);
+  // Save to Supabase
+  document.getElementById('save-status').textContent='💾 Saving to Supabase…';
+  try {
+    await sbPost('progress',{user_id:userId,subject:currentSubject,chapter:currentChapterName,level:currentLevel,correct:correctCount,wrong:wrongCount,skipped:skipCount,neet_score:ns});
+    await updateLeaderboard(ns);
+    document.getElementById('save-status').textContent='✅ Saved to Supabase!';
+  } catch(e) {
+    document.getElementById('save-status').textContent='⚠️ Could not save (offline?)';
+  }
 }
 
-function retryChapter() {
-  startQuiz(currentSubject, 0, currentChapterName);
+async function updateLeaderboard(ns) {
+  if (!username) return;
+  try {
+    const ex = await sbGet('leaderboard',`?user_id=eq.${userId}&limit=1`);
+    if (ex && ex.length>0) {
+      const row=ex[0];
+      await sbPatch('leaderboard',`?id=eq.${row.id}`,{
+        username,
+        total_score: row.total_score+ns,
+        total_correct: row.total_correct+correctCount,
+        total_attempts: row.total_attempts+1,
+        updated_at: new Date().toISOString()
+      });
+    } else {
+      await sbPost('leaderboard',{user_id:userId,username,total_score:ns,total_correct:correctCount,total_attempts:1});
+    }
+  } catch(e){console.warn('LB update failed:',e.message);}
 }
 
-function reviewAnswers() {
-  buildReview();
-  showScreen('review');
-}
+function retryChapter(){startQuizWithLevel(currentLevel);}
 
-function buildReview() {
-  const letters = ['A', 'B', 'C', 'D'];
-  const list = document.getElementById('review-list');
-  list.innerHTML = currentQuestions.map((q, i) => {
-    const ua = userAnswers[i];
-    const isCorrect = ua === q.ans;
-    const isSkip = ua === null;
-    const cardClass = isSkip ? 'rc-skip' : (isCorrect ? 'rc-correct' : 'rc-wrong');
-    const badgeClass = isSkip ? 'skip' : (isCorrect ? 'correct' : 'wrong');
-    const badgeText = isSkip ? '⏭ Skipped' : (isCorrect ? '✅ Correct' : '❌ Wrong');
-
-    const opts = q.opts.map((opt, oi) => {
-      let cls = '';
-      if (oi === q.ans) cls = 'is-correct';
-      else if (oi === ua && !isCorrect) cls = 'is-wrong';
-      return `<div class="rc-opt ${cls}">
-        <span class="opt-lbl">(${letters[oi]})</span>
-        <span>${opt}</span>
-      </div>`;
-    }).join('');
-
-    return `<div class="review-card ${cardClass}">
-      <div class="rc-header">
-        <span class="rc-qnum">Q${i+1}</span>
-        <span class="rc-badge ${badgeClass}">${badgeText}</span>
-      </div>
-      <div class="rc-question">${q.q}</div>
-      <div class="rc-options">${opts}</div>
-      <div class="rc-explanation">
-        <div class="rc-expl-label">📘 NCERT Explanation</div>
-        ${q.expl}
-      </div>
+// ============================================================
+// REVIEW
+// ============================================================
+function reviewAnswers(){buildReview();showScreen('review');}
+function buildReview(){
+  const L=['A','B','C','D'];
+  document.getElementById('review-list').innerHTML=currentQuestions.map((q,i)=>{
+    const ua=userAnswers[i],ok=ua===q.ans,sk=ua===null;
+    const cc=sk?'rc-s':ok?'rc-c':'rc-w',bc=sk?'s':ok?'c':'w',bt=sk?'⏭ Skipped':ok?'✅ Correct':'❌ Wrong';
+    const opts=q.opts.map((o,oi)=>`<div class="rc-opt ${oi===q.ans?'ic':oi===ua&&!ok?'iw':''}"><b>(${L[oi]})</b><span>${o}</span></div>`).join('');
+    return `<div class="review-card ${cc}">
+      <div class="rc-header"><span class="rc-qnum">Q${i+1}</span><span class="rc-badge ${bc}">${bt}</span></div>
+      <div class="rc-q">${q.q}</div>
+      <div class="rc-opts">${opts}</div>
+      <div class="rc-expl"><b>📘 NCERT Explanation</b>${q.expl}</div>
     </div>`;
   }).join('');
 }
 
-// ===================== DIALOG =====================
-function exitQuiz() {
-  document.getElementById('dialog').classList.remove('hidden');
+// ============================================================
+// LEADERBOARD
+// ============================================================
+async function openLeaderboard(){showScreen('leaderboard');loadLeaderboard();}
+async function loadLeaderboard(){
+  document.getElementById('lb-content').innerHTML=`<div class="empty"><div class="empty-icon" style="animation:spin 1s linear infinite;display:inline-block">⟳</div><div class="empty-title" style="margin-top:8px">Loading…</div></div>`;
+  try {
+    const data=await sbGet('leaderboard','?select=*&order=total_score.desc&limit=50');
+    if(!data||data.length===0){
+      document.getElementById('lb-content').innerHTML=`<div class="empty"><div class="empty-icon">🏆</div><div class="empty-title">No scores yet</div><div class="empty-sub">Complete a quiz to appear here</div></div>`;
+      return;
+    }
+    document.getElementById('lb-content').innerHTML=data.map((row,i)=>{
+      const rk=i+1,isYou=row.user_id===userId;
+      const rkCls=rk===1?'r1':rk===2?'r2':rk===3?'r3':'rn';
+      const rkLabel=rk<=3?['🥇','🥈','🥉'][rk-1]:rk;
+      const sc=rk===1?'#C89B14':rk<=3?'var(--purple)':'var(--blue)';
+      return `<div class="lb-card" ${isYou?'style="background:rgba(90,45,130,0.05);border:2px solid rgba(90,45,130,0.2);"':''}>
+        <div class="lb-rank ${rkCls}">${rkLabel}</div>
+        <div class="lb-info">
+          <div class="lb-name">${row.username||'Anonymous'}${isYou?'<span class="you-tag">You</span>':''}</div>
+          <div class="lb-meta">${row.total_attempts} attempt${row.total_attempts!==1?'s':''} · ${row.total_correct} correct</div>
+        </div>
+        <div class="lb-score" style="color:${sc}">${row.total_score}</div>
+      </div>`;
+    }).join('');
+  } catch(e){
+    document.getElementById('lb-content').innerHTML=`<div class="empty"><div class="empty-icon">⚠️</div><div class="empty-title">Could not load</div><div class="empty-sub">${e.message}</div></div>`;
+  }
 }
-function closeDialog() {
-  document.getElementById('dialog').classList.add('hidden');
+
+// ============================================================
+// ANALYTICS
+// ============================================================
+async function openAnalytics(){showScreen('analytics');loadAnalytics();}
+async function loadAnalytics(){
+  document.getElementById('ana-content').innerHTML=`<div class="empty"><div class="empty-icon" style="animation:spin 1s linear infinite;display:inline-block">⟳</div><div class="empty-title" style="margin-top:8px">Loading analytics…</div></div>`;
+  try {
+    const hist=await sbGet('progress',`?user_id=eq.${userId}&order=attempted_at.desc&limit=100`);
+    if(!hist||hist.length===0){
+      document.getElementById('ana-content').innerHTML=`<div class="empty"><div class="empty-icon">📊</div><div class="empty-title">No history yet</div><div class="empty-sub">Complete quizzes to see your analytics</div></div>`;
+      return;
+    }
+    const totAttempts=hist.length,totCorrect=hist.reduce((s,r)=>s+r.correct,0),totWrong=hist.reduce((s,r)=>s+r.wrong,0),totScore=hist.reduce((s,r)=>s+r.neet_score,0);
+    const acc=totCorrect+totWrong>0?Math.round(totCorrect/(totCorrect+totWrong)*100):0;
+    const bySub={};hist.forEach(r=>{if(!bySub[r.subject])bySub[r.subject]={c:0,w:0};bySub[r.subject].c+=r.correct;bySub[r.subject].w+=r.wrong;});
+    const byLvl={basic:0,intermediate:0,advanced:0};hist.forEach(r=>{if(byLvl[r.level]!==undefined)byLvl[r.level]++;});
+    const subCols={physics:'var(--blue)',biology:'var(--green-light)',chemistry:'var(--amber)'};
+    const subIcons={physics:'⚛️',biology:'🧬',chemistry:'🧪'};
+    const bars=Object.entries(bySub).map(([sub,d])=>{
+      const a=d.c+d.w>0?Math.round(d.c/(d.c+d.w)*100):0;
+      return `<div class="bar-row"><div class="bar-label">${subIcons[sub]||''} ${sub.charAt(0).toUpperCase()+sub.slice(1)}</div><div class="bar-wrap"><div class="bar-fill" style="width:${a}%;background:${subCols[sub]||'var(--blue)'}"></div></div><div class="bar-pct">${a}%</div></div>`;
+    }).join('');
+    const recent=hist.slice(0,10).map(r=>{
+      const icon={physics:'⚛️',biology:'🧬',chemistry:'🧪'}[r.subject]||'📚';
+      const bg={physics:'rgba(26,62,140,0.1)',biology:'rgba(46,155,90,0.1)',chemistry:'rgba(192,80,32,0.1)'}[r.subject]||'#eee';
+      const sc=r.neet_score>=0?'var(--green-light)':'#ff6b6b';
+      const dt=new Date(r.attempted_at).toLocaleDateString('en-IN',{day:'numeric',month:'short'});
+      return `<div class="hist-item"><div class="hist-icon" style="background:${bg}">${icon}</div><div class="hist-info"><div class="hist-name">${r.chapter}</div><div class="hist-meta">${r.level} · ${r.correct}✅ ${r.wrong}❌ · ${dt}</div></div><div class="hist-score" style="color:${sc}">${r.neet_score>0?'+':''}${r.neet_score}</div></div>`;
+    }).join('');
+    document.getElementById('ana-content').innerHTML=`
+      <div class="ana-card">
+        <div class="ana-title">Overall Stats</div>
+        <div class="big-grid">
+          <div class="ana-stat"><div class="ana-val" style="color:var(--gold)">${totScore}</div><div class="ana-lbl">Total Score</div></div>
+          <div class="ana-stat"><div class="ana-val" style="color:var(--blue)">${totAttempts}</div><div class="ana-lbl">Quizzes Done</div></div>
+          <div class="ana-stat"><div class="ana-val" style="color:var(--green-light)">${acc}%</div><div class="ana-lbl">Accuracy</div></div>
+          <div class="ana-stat"><div class="ana-val" style="color:var(--purple)">${totCorrect}</div><div class="ana-lbl">Total Correct</div></div>
+        </div>
+      </div>
+      <div class="ana-card">
+        <div class="ana-title">Accuracy by Subject</div>
+        ${bars||'<div style="font-size:0.85rem;color:var(--text-mid)">No data yet</div>'}
+      </div>
+      <div class="ana-card">
+        <div class="ana-title">Level Distribution</div>
+        <div style="display:flex;gap:10px;">
+          <div class="ana-stat" style="flex:1"><div class="ana-val" style="color:var(--green-light)">${byLvl.basic}</div><div class="ana-lbl">🟢 Basic</div></div>
+          <div class="ana-stat" style="flex:1"><div class="ana-val" style="color:var(--gold)">${byLvl.intermediate}</div><div class="ana-lbl">🟡 Inter</div></div>
+          <div class="ana-stat" style="flex:1"><div class="ana-val" style="color:#ff6b6b">${byLvl.advanced}</div><div class="ana-lbl">🔴 Advanced</div></div>
+        </div>
+      </div>
+      <div class="ana-card">
+        <div class="ana-title">Recent Attempts</div>
+        ${recent}
+      </div>`;
+  } catch(e){
+    document.getElementById('ana-content').innerHTML=`<div class="empty"><div class="empty-icon">⚠️</div><div class="empty-title">Could not load</div><div class="empty-sub">${e.message}</div></div>`;
+  }
 }
-function confirmExit() {
-  closeDialog();
-  goTopics();
+
+// ============================================================
+// EXIT / DIALOG
+// ============================================================
+function exitQuiz(){document.getElementById('dialog').classList.remove('hidden');}
+function closeDialog(){document.getElementById('dialog').classList.add('hidden');}
+function confirmExit(){closeDialog();goTopics();}
+
+// ============================================================
+// PYQ STATE & DATA
+// ============================================================
+const PYQ_YEARS = [2024,2023,2022,2021,2020,2019,2018,2017];
+let pyqSelectedYear = 2024;
+let pyqSelectedSubject = 'all';
+let pyqQuestions = [];
+let pyqIndex = 0;
+let pyqScore = 0, pyqCorrect = 0, pyqWrong = 0, pyqSkip = 0;
+let pyqAnswers = [];
+let pyqAutoTimer = null;
+let pyqAutoCountdown = null;
+
+// Fallback PYQ questions (real NEET PYQs)
+const PYQ_FALLBACK = [
+  {year:2023,subject:'biology',q:"Which of the following is NOT a characteristic of living organisms?",opts:["Growth","Metabolism","Ability to reproduce","Consciousness"],ans:3,expl:"Consciousness is debated as a defining feature; it is not universally accepted as a characteristic of ALL living organisms. Growth, metabolism, and reproduction are universally accepted."},
+  {year:2023,subject:'physics',q:"A body is moving along a circular path with variable speed. It has:",opts:["A radial acceleration only","A tangential acceleration only","Both radial and tangential accelerations","No acceleration"],ans:2,expl:"Variable speed means tangential acceleration exists; circular path means centripetal (radial) acceleration also exists. Both act simultaneously."},
+  {year:2023,subject:'chemistry',q:"Which of the following is the correct IUPAC name of CH₃−CH₂−CHO?",opts:["Propanal","Propanone","Propan-1-ol","Propanoic acid"],ans:0,expl:"CH₃−CH₂−CHO is a 3-carbon aldehyde. IUPAC name is Propanal."},
+  {year:2022,subject:'biology',q:"DNA replication occurs in which phase of cell cycle?",opts:["G1 phase","S phase","G2 phase","M phase"],ans:1,expl:"DNA synthesis/replication occurs during the S (Synthesis) phase of interphase in the cell cycle."},
+  {year:2022,subject:'physics',q:"The de Broglie wavelength associated with an electron accelerated through a potential difference V is proportional to:",opts:["V","1/V","1/√V","√V"],ans:2,expl:"λ = h/√(2meV), so λ ∝ 1/√V."},
+  {year:2022,subject:'chemistry',q:"Which of the following acts as a Lewis acid?",opts:["NH₃","H₂O","BF₃","F⁻"],ans:2,expl:"BF₃ has an empty p orbital and can accept electron pairs, making it a Lewis acid."},
+  {year:2021,subject:'biology',q:"Bowman's capsule is part of which structure?",opts:["Neuron","Nephron","Liver lobule","Alveolus"],ans:1,expl:"Bowman's capsule is the cup-shaped structure at the beginning of the nephron that surrounds the glomerulus."},
+  {year:2021,subject:'physics',q:"A photon of energy E has momentum p. If c is the speed of light, then:",opts:["p = Ec","p = E/c","p = Ec²","p = E/c²"],ans:1,expl:"For photon: E = pc (from relativistic energy-momentum relation where rest mass = 0), so p = E/c."},
+  {year:2021,subject:'chemistry',q:"Which of the following is an example of a heterogeneous catalyst?",opts:["H₂SO₄ in esterification","Enzyme in fermentation","V₂O₅ in Contact process","HCl in hydrolysis"],ans:2,expl:"V₂O₅ (solid) catalyses SO₂ to SO₃ (gas) — reactant and catalyst are in different phases. This is heterogeneous catalysis."},
+  {year:2020,subject:'biology',q:"Which pigment absorbs light at 700 nm wavelength?",opts:["Chlorophyll b","Chlorophyll a","Carotenoids","Phycoerythrin"],ans:1,expl:"Chlorophyll a absorbs maximum light at 680 nm and 700 nm (P700 reaction centre)."},
+  {year:2020,subject:'physics',q:"Two parallel plates are charged with opposite charges. The electric field between the plates is E. If the separation is doubled keeping the charge same, the field becomes:",opts:["2E","E","E/2","E/4"],ans:1,expl:"For a parallel plate capacitor E = σ/ε₀ which depends only on surface charge density (σ). Since Q and plate area unchanged, σ unchanged, so E unchanged."},
+  {year:2020,subject:'chemistry',q:"Glucose reacts with excess Tollens' reagent to give:",opts:["Silver mirror","Black precipitate","White precipitate","Blue solution"],ans:0,expl:"Aldehydes (including glucose) reduce Tollens' reagent (ammoniacal AgNO₃) to produce a silver mirror on the test tube walls."},
+  {year:2019,subject:'biology',q:"Which of the following represents the correct sequence of events in mitosis?",opts:["Prophase→Metaphase→Anaphase→Telophase","Metaphase→Prophase→Telophase→Anaphase","Prophase→Anaphase→Metaphase→Telophase","Anaphase→Telophase→Prophase→Metaphase"],ans:0,expl:"Mitosis proceeds: Prophase (chromosomes condense) → Metaphase (align at equator) → Anaphase (chromatids separate) → Telophase (nuclear envelope reforms)."},
+  {year:2019,subject:'physics',q:"The work done by a magnetic force on a moving charge is always:",opts:["Positive","Negative","Zero","Depends on velocity"],ans:2,expl:"Magnetic force is always perpendicular to velocity, hence displacement. W = F·d·cosθ = F·d·cos90° = 0."},
+  {year:2019,subject:'chemistry',q:"Nucleophilic substitution (SN2) reaction is favoured by:",opts:["Tertiary substrate","Polar protic solvent","Strong nucleophile and primary substrate","Weak nucleophile"],ans:2,expl:"SN2 requires a strong nucleophile attacking a less sterically hindered (primary) substrate in a polar aprotic solvent."},
+  {year:2018,subject:'biology',q:"Streptomycin is obtained from which microorganism?",opts:["Streptomyces griseus","Streptomyces venezuelae","Penicillium notatum","Bacillus subtilis"],ans:0,expl:"Streptomycin, the first aminoglycoside antibiotic, is produced by the soil bacterium Streptomyces griseus."},
+  {year:2018,subject:'physics',q:"What is the dimension of gravitational constant G?",opts:["M⁻¹L³T⁻²","ML²T⁻²","M⁻¹L²T⁻²","M⁻²L³T⁻²"],ans:0,expl:"From F = Gm₁m₂/r², G = Fr²/m² → [G] = MLT⁻² × L² / M² = M⁻¹L³T⁻²."},
+  {year:2018,subject:'chemistry',q:"Which of the following has the highest boiling point?",opts:["n-Butane","Isobutane","n-Pentane","Neopentane"],ans:2,expl:"Boiling point increases with surface area (Van der Waals forces). n-Pentane has the most carbons and longest chain among the options."},
+  {year:2017,subject:'biology',q:"Which hormone is responsible for the 'fight or flight' response?",opts:["Insulin","Thyroxine","Adrenaline (Epinephrine)","Cortisol"],ans:2,expl:"Adrenaline (epinephrine) from adrenal medulla rapidly prepares the body for fight-or-flight: increases heart rate, blood glucose, and redirects blood flow."},
+  {year:2017,subject:'physics',q:"A lens of focal length f forms a real image of an object at the same position as the object. The distance of the object from the lens is:",opts:["f","2f","f/2","3f"],ans:1,expl:"For image to coincide with object (real), rays must retrace. Object must be at centre of curvature (2f for a thin lens), so object distance = 2f."},
+];
+
+function openPYQ() {
+  renderPYQYears();
+  showScreen('pyq');
+}
+
+function renderPYQYears() {
+  document.getElementById('pyq-year-grid').innerHTML = PYQ_YEARS.map(y =>
+    `<button class="pyq-year-btn${y===pyqSelectedYear?' active':''}" onclick="setPYQYear(${y})">${y}</button>`
+  ).join('');
+}
+
+function setPYQYear(y) {
+  pyqSelectedYear = y;
+  document.querySelectorAll('.pyq-year-btn').forEach(b => b.classList.toggle('active', parseInt(b.textContent)===y));
+}
+
+function setPYQSubject(s) {
+  pyqSelectedSubject = s;
+  ['all','physics','biology','chemistry'].forEach(id => {
+    document.getElementById('pyq-sub-'+id).classList.toggle('active', id===s);
+  });
+}
+
+async function startPYQAttempt() {
+  showScreen('loading');
+  document.getElementById('loading-text').textContent = 'Loading PYQ questions…';
+  document.getElementById('loading-sub').textContent = `NEET ${pyqSelectedYear} · ${pyqSelectedSubject==='all'?'All Subjects':pyqSelectedSubject.charAt(0).toUpperCase()+pyqSelectedSubject.slice(1)}`;
+
+  let qs = await fetchPYQFromDB(pyqSelectedYear, pyqSelectedSubject);
+  if (!qs || qs.length === 0) {
+    // Use fallback
+    qs = PYQ_FALLBACK.filter(q =>
+      (pyqSelectedYear === 'all' || q.year === pyqSelectedYear) &&
+      (pyqSelectedSubject === 'all' || q.subject === pyqSelectedSubject)
+    );
+    if (qs.length === 0) qs = shuffle([...PYQ_FALLBACK]).slice(0, 10);
+    showToast('💡 Sample PYQs loaded — add real ones to Supabase!', 'ok');
+  }
+
+  pyqQuestions = shuffle(qs);
+  pyqIndex = 0; pyqScore = 0; pyqCorrect = 0; pyqWrong = 0; pyqSkip = 0;
+  pyqAnswers = new Array(pyqQuestions.length).fill(null);
+  clearPYQTimers();
+
+  document.getElementById('pyq-quiz-title').textContent = `NEET PYQ ${pyqSelectedYear==='all'?'Mix':pyqSelectedYear}`;
+  document.getElementById('pyq-score-pill').textContent = 'Score: 0';
+  document.getElementById('pyq-timer-wrap').classList.add('hidden');
+  renderPYQQuestion();
+  showScreen('pyq-quiz');
+}
+
+async function fetchPYQFromDB(year, subject) {
+  try {
+    let query = '?select=*';
+    if (year !== 'all') query += `&year=eq.${year}`;
+    if (subject !== 'all') query += `&subject=eq.${subject}`;
+    query += '&limit=30';
+    const data = await sbGet('pyq_questions', query);
+    return shuffle(data).slice(0, 20);
+  } catch(e) { console.warn('PYQ DB fetch failed:', e.message); return null; }
+}
+
+function renderPYQQuestion() {
+  clearPYQTimers();
+  document.getElementById('pyq-timer-wrap').classList.add('hidden');
+
+  const q = pyqQuestions[pyqIndex];
+  const L = ['A','B','C','D'];
+  const pct = (pyqIndex / pyqQuestions.length) * 100;
+  document.getElementById('pyq-quiz-progress').style.width = pct + '%';
+  document.getElementById('pyq-quiz-counter').textContent = `Q ${pyqIndex+1} / ${pyqQuestions.length}`;
+  document.getElementById('pyq-year-pill').textContent = q.year || pyqSelectedYear;
+
+  document.getElementById('pyq-quiz-content').innerHTML = `
+    <div class="question-card">
+      <div class="pyq-year-tag">📅 NEET ${q.year||pyqSelectedYear} · ${(q.subject||'').toUpperCase()}</div>
+      <div class="q-num">QUESTION ${pyqIndex+1}</div>
+      <div class="q-text">${q.q}</div>
+    </div>
+    <div class="options-list" id="pyq-opts">
+      ${q.opts.map((o,i)=>`<button class="opt-btn" id="pq${i}" onclick="pickPYQ(${i})"><div class="opt-letter">${L[i]}</div><div class="opt-text">${o}</div></button>`).join('')}
+    </div>
+    <div id="pyq-fb"></div>`;
+}
+
+function pickPYQ(sel) {
+  const q = pyqQuestions[pyqIndex];
+  const L = ['A','B','C','D'];
+  pyqAnswers[pyqIndex] = sel;
+  document.querySelectorAll('.opt-btn').forEach(b => b.disabled = true);
+  const ok = sel === q.ans;
+  document.getElementById('pq'+sel).classList.add(ok?'correct':'wrong');
+  document.getElementById('pq'+sel).querySelector('.opt-letter').textContent = ok?'✓':'✗';
+  if (!ok) {
+    document.getElementById('pq'+q.ans).classList.add('revealed');
+    document.getElementById('pq'+q.ans).querySelector('.opt-letter').textContent = '✓';
+  }
+  if (ok) { pyqScore+=4; pyqCorrect++; } else { pyqScore-=1; pyqWrong++; }
+  document.getElementById('pyq-score-pill').textContent = `Score: ${pyqScore}`;
+  const pill = document.getElementById('pyq-score-pill');
+  pill.classList.remove('pop','shake'); void pill.offsetWidth; pill.classList.add(ok?'pop':'shake');
+
+  const isLast = pyqIndex >= pyqQuestions.length - 1;
+  document.getElementById('pyq-fb').innerHTML = `
+    <div class="feedback ${ok?'correct':'wrong'}">${ok?'✅ Correct! +4 points':`❌ Wrong! −1 pt · Correct: (${L[q.ans]}) ${q.opts[q.ans]}`}</div>
+    <div class="expl-box"><div class="expl-label">📘 EXPLANATION</div><div class="expl-text">${q.expl}</div></div>
+    <button class="next-btn" id="pyq-next-btn" onclick="nextPYQ()">${isLast?'📊 See Results':'Next Question →'}</button>`;
+
+  // Start 10s auto-advance timer
+  startPYQAutoTimer(isLast);
+}
+
+function startPYQAutoTimer(isLast) {
+  const wrap = document.getElementById('pyq-timer-wrap');
+  const bar = document.getElementById('pyq-timer-bar');
+  const secEl = document.getElementById('pyq-timer-sec');
+  wrap.classList.remove('hidden');
+  bar.style.transition = 'none';
+  bar.style.width = '100%';
+  void bar.offsetWidth;
+
+  let sec = 10;
+  secEl.textContent = sec;
+  // Animate bar from 100% to 0% over 10s
+  bar.style.transition = 'width 10s linear';
+  bar.style.width = '0%';
+
+  pyqAutoCountdown = setInterval(() => {
+    sec--;
+    secEl.textContent = sec;
+    if (sec <= 0) {
+      clearInterval(pyqAutoCountdown);
+      pyqAutoCountdown = null;
+    }
+  }, 1000);
+
+  pyqAutoTimer = setTimeout(() => {
+    wrap.classList.add('hidden');
+    if (isLast) showPYQResults();
+    else { pyqIndex++; renderPYQQuestion(); }
+  }, 10000);
+}
+
+function clearPYQTimers() {
+  if (pyqAutoTimer) { clearTimeout(pyqAutoTimer); pyqAutoTimer = null; }
+  if (pyqAutoCountdown) { clearInterval(pyqAutoCountdown); pyqAutoCountdown = null; }
+}
+
+function nextPYQ() {
+  clearPYQTimers();
+  document.getElementById('pyq-timer-wrap').classList.add('hidden');
+  if (pyqIndex < pyqQuestions.length - 1) { pyqIndex++; renderPYQQuestion(); }
+  else showPYQResults();
+}
+
+function showPYQResults() {
+  // Reuse the existing results screen but fill with PYQ data
+  pyqSkip = pyqAnswers.filter(a => a === null).length;
+  const total = pyqQuestions.length;
+  const ns = (pyqCorrect*4) - (pyqWrong*1);
+  const maxNs = total * 4;
+  const pct = Math.round((pyqCorrect / total) * 100);
+
+  document.getElementById('r-correct').textContent = pyqCorrect;
+  document.getElementById('r-wrong').textContent = pyqWrong;
+  document.getElementById('r-skip').textContent = pyqSkip;
+  document.getElementById('r-total').textContent = total;
+  document.getElementById('r-neet').textContent = ns;
+  document.getElementById('r-max').textContent = `/ ${maxNs} maximum`;
+
+  const b = document.getElementById('perf-badge'); b.className='perf-badge';
+  if(pct>=80){b.classList.add('perf-excellent');b.textContent='🏆 Excellent!';}
+  else if(pct>=50){b.classList.add('perf-good');b.textContent='👍 Good Job!';}
+  else{b.classList.add('perf-practice');b.textContent='📚 Keep Practising';}
+
+  // Override result buttons for PYQ context
+  document.getElementById('result-btns-wrap').innerHTML = `
+    <button class="result-btn primary" onclick="startPYQAttempt()">🔄 Retry PYQ</button>
+    <button class="result-btn secondary" onclick="reviewPYQAnswers()">📖 Review Answers</button>
+    <button class="result-btn secondary" onclick="openPYQ()">📅 Choose Another Year</button>
+    <button class="result-btn secondary" onclick="openLeaderboard()">🏆 View Leaderboard</button>`;
+
+  showScreen('results');
+
+  let cur=0; const el=document.getElementById('score-display');
+  const step=Math.ceil(Math.abs(ns)/40)||1;
+  const iv=setInterval(()=>{if(Math.abs(cur-ns)<=step){cur=ns;clearInterval(iv);}else cur+=(ns>0?step:-step);el.textContent=cur;},28);
+  setTimeout(()=>{document.getElementById('score-arc').style.strokeDashoffset=502*(1-Math.max(0,pct)/100);},100);
+
+  // Save to Supabase
+  document.getElementById('save-status').textContent='💾 Saving PYQ attempt…';
+  sbPost('progress',{user_id:userId,subject:'pyq_'+pyqSelectedSubject,chapter:'NEET PYQ '+(pyqSelectedYear==='all'?'Mix':pyqSelectedYear),level:'attempt',correct:pyqCorrect,wrong:pyqWrong,skipped:pyqSkip,neet_score:ns})
+    .then(()=>updateLeaderboard(ns))
+    .then(()=>{document.getElementById('save-status').textContent='✅ Saved!';})
+    .catch(()=>{document.getElementById('save-status').textContent='⚠️ Could not save (offline?)';});
+}
+
+function reviewPYQAnswers() {
+  const L=['A','B','C','D'];
+  document.getElementById('review-list').innerHTML = pyqQuestions.map((q,i)=>{
+    const ua=pyqAnswers[i],ok=ua===q.ans,sk=ua===null;
+    const cc=sk?'rc-s':ok?'rc-c':'rc-w',bc=sk?'s':ok?'c':'w',bt=sk?'⏭ Skipped':ok?'✅ Correct':'❌ Wrong';
+    const opts=q.opts.map((o,oi)=>`<div class="rc-opt ${oi===q.ans?'ic':oi===ua&&!ok?'iw':''}"><b>(${L[oi]})</b><span>${o}</span></div>`).join('');
+    return `<div class="review-card ${cc}">
+      <div class="rc-header"><span class="rc-qnum">Q${i+1} · NEET ${q.year||pyqSelectedYear}</span><span class="rc-badge ${bc}">${bt}</span></div>
+      <div class="rc-q">${q.q}</div>
+      <div class="rc-opts">${opts}</div>
+      <div class="rc-expl"><b>📘 Explanation</b>${q.expl}</div>
+    </div>`;
+  }).join('');
+  showScreen('review');
+}
+
+function exitPYQQuiz() {
+  clearPYQTimers();
+  // Show custom exit dialog
+  openPYQ();
+}
+
+
+// ============================================================
+// TOAST
+// ============================================================
+function showToast(msg,type='ok'){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.className=`toast ${type}`;
+  void t.offsetWidth;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),3000);
 }
 </script>
 </body>

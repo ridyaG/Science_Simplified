@@ -368,7 +368,7 @@ h1,h2,h3,.pp{font-family:'Poppins',sans-serif;}
         <div class="yr-btn" id="yr-2025" onclick="selectYear(2025)">
           <div class="yr-badge">Live ✅</div>
           <div class="yr-num">2025</div>
-          <div class="yr-sub">🧬 Biology · 90 Qs</div>
+          <div class="yr-sub">Bio · Phy · Che</div>
         </div>
         <div class="yr-btn yr-soon" id="yr-2024" style="opacity:.45;cursor:not-allowed;">
           <div class="yr-num" style="color:#aaa;">2024</div>
@@ -395,12 +395,19 @@ h1,h2,h3,.pp{font-family:'Poppins',sans-serif;}
           <div class="yr-sub" style="color:#bbb;">Coming soon</div>
         </div>
       </div>
+      <div class="sec-lbl" style="margin-top:4px;">Subject Filter</div>
+      <div class="sf-row">
+        <button class="sf-btn sf-all" id="sf-all"      onclick="selectSF('all')">🔬 All</button>
+        <button class="sf-btn" id="sf-physics"         onclick="selectSF('physics')">⚛️ Physics</button>
+        <button class="sf-btn" id="sf-biology"         onclick="selectSF('biology')">🧬 Biology</button>
+        <button class="sf-btn" id="sf-chemistry"       onclick="selectSF('chemistry')">🧪 Chemistry</button>
+      </div>
       <div class="info-box">
         <div class="info-title">📋 How Attempt Mode Works</div>
         <ul class="info-list">
-          <li>Select a year above, then tap <strong>Start Attempt</strong></li>
-          <li>NEET 2025 Biology — 90 real questions with step-by-step solutions</li>
-          <li>Countdown timer scales to number of questions (2 min / question)</li>
+          <li>Select a year and subject filter, then tap <strong>Start Attempt</strong></li>
+          <li>NEET 2025 — Biology · Physics · Chemistry questions from Supabase</li>
+          <li>Countdown timer scales to question count (2 min / question)</li>
           <li>Tap an option to lock your answer — skip anytime (no penalty)</li>
           <li>Solution revealed instantly; auto-advances to next Q after 5 s</li>
           <li>NEET marking: +4 correct · −1 wrong · 0 skipped</li>
@@ -900,15 +907,15 @@ async function showChResults(){
    PYQ SECTION
 ═══════════════════════════════════════════ */
 function openPYQ(){
-  pyqYear=null;
+  pyqYear=null; pyqSF='all';
   document.querySelectorAll('.yr-btn').forEach(b=>b.classList.remove('sel'));
+  setSF('all');
   document.getElementById('pyq-go').disabled=true;
   document.getElementById('pyq-go').textContent='📜 Start Attempt →';
   showScr('pyq');
 }
 
 function selectYear(y){
-  // Only 2025 has data in Supabase currently
   const available=[2025];
   if(!available.includes(y)){showToast('Coming soon — only 2025 is available now','err');return;}
   pyqYear=y;
@@ -917,17 +924,36 @@ function selectYear(y){
   document.getElementById('pyq-go').disabled=false;
 }
 
+function selectSF(sub){
+  pyqSF=sub; setSF(sub);
+}
+
+function setSF(sub){
+  const map={all:'sf-all',physics:'sf-phy',biology:'sf-bio',chemistry:'sf-che'};
+  ['sf-all','sf-physics','sf-biology','sf-chemistry'].forEach(id=>{
+    const el=document.getElementById(id);
+    if(el) el.className='sf-btn';
+  });
+  const activeId='sf-'+(sub==='all'?'all':sub);
+  const activeEl=document.getElementById(activeId);
+  if(activeEl) activeEl.classList.add(map[sub]||'sf-all');
+}
+
 async function startPYQ(){
   if(!pyqYear)return;
   const btn=document.getElementById('pyq-go');
   btn.disabled=true; btn.textContent='Loading…';
   document.getElementById('load-tx').textContent=`Loading NEET ${pyqYear} PYQs…`;
-  document.getElementById('load-sub').textContent='🧬 Biology · 90 Questions';
+  const subLabel={all:'All Subjects',physics:'⚛️ Physics',biology:'🧬 Biology',chemistry:'🧪 Chemistry'};
+  document.getElementById('load-sub').textContent=subLabel[pyqSF]||'All Subjects';
   showScr('loading');
 
   let qs=await fetchPYQs(pyqYear,pyqSF);
   if(!qs||qs.length===0){
-    qs=shuffle([...FB.biology]).map(q=>({...q,subject:'biology',pyq_year:pyqYear,chapter:''}));
+    const subs=pyqSF==='all'?['physics','biology','chemistry']:[pyqSF];
+    const combined=[];
+    subs.forEach(s=>shuffle([...(FB[s]||[])]).slice(0,Math.ceil(9/subs.length)).forEach(q=>combined.push({...q,subject:s,pyq_year:pyqYear,chapter:''})));
+    qs=shuffle(combined);
     showToast('💡 Sample questions shown — upload real PYQs to Supabase!','ok');
   }
 
@@ -945,19 +971,19 @@ async function startPYQ(){
 
 async function fetchPYQs(year,sub){
   try{
-    // pyq_questions table columns: id, q, opts, ans, expl, steps, created_at
-    // opts and steps are text[] — PostgREST returns them as JSON arrays
-    const data=await sbGet('pyq_questions','?select=id,q,opts,ans,expl,steps&order=id&limit=200');
+    // Table columns: id, year, subject, chapter, q, opts, ans, expl, steps, created_at
+    let query=`?year=eq.${year}&select=id,year,subject,chapter,q,opts,ans,expl,steps&order=id&limit=300`;
+    if(sub&&sub!=='all') query+=`&subject=eq.${sub}`;
+    const data=await sbGet('pyq_questions',query);
     if(!data||data.length===0)return null;
-    // Normalise: ensure opts and steps are always JS arrays
     const normalised=data.map(row=>({
       ...row,
       opts:  Array.isArray(row.opts)  ? row.opts  : (typeof row.opts==='string'  ? JSON.parse(row.opts)  : []),
       steps: Array.isArray(row.steps) ? row.steps : (typeof row.steps==='string' ? JSON.parse(row.steps) : []),
       ans:   Number(row.ans),
-      subject:'biology',
-      chapter:'',
-      pyq_year:year
+      subject: row.subject||'biology',
+      chapter: row.chapter||'',
+      pyq_year: row.year||year
     }));
     return shuffle(normalised);
   }catch(e){console.warn('PYQ DB fetch error:',e.message);return null;}
@@ -994,10 +1020,10 @@ function renderPYQQ(){
 
   const stMap={physics:'st-phy',biology:'st-bio',chemistry:'st-che'};
   const siMap={physics:'⚛️ Physics',biology:'🧬 Biology',chemistry:'🧪 Chemistry'};
-  const subKey=q.subject||'biology';
+  const subKey=(q.subject||'biology').toLowerCase();
   const stEl=document.getElementById('pyq-sub-tag');
   stEl.className='sub-tag '+(stMap[subKey]||'st-bio');
-  stEl.textContent=siMap[subKey]||'🧬 Biology';
+  stEl.textContent=siMap[subKey]||('🔬 '+q.subject);
 
   const canGoBackPYQ=pQi>0 && pAnswers[pQi-1]===null;
   document.getElementById('pyq-content').innerHTML=`

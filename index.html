@@ -214,6 +214,39 @@ h1,h2,h3,.pp{font-family:'Poppins',sans-serif;}
 .hide{display:none!important;}
 .empty{text-align:center;padding:40px 20px;color:var(--txm);}.eico{font-size:3rem;margin-bottom:12px;}.etitle{font-family:'Poppins',sans-serif;font-weight:600;font-size:1rem;color:var(--tx);margin-bottom:6px;}.esub{font-size:.85rem;}
 ::-webkit-scrollbar{width:5px;}::-webkit-scrollbar-track{background:transparent;}::-webkit-scrollbar-thumb{background:rgba(200,155,20,.3);border-radius:99px;}
+
+/* QUESTION PALETTE */
+.pal-overlay{position:fixed;inset:0;z-index:400;background:rgba(0,0,0,.55);display:none;animation:pal-bg .2s ease;}
+.pal-overlay.on{display:block;}
+@keyframes pal-bg{from{opacity:0}to{opacity:1}}
+.pal-sheet{position:fixed;bottom:0;left:0;right:0;z-index:401;background:#1a1d35;border-radius:22px 22px 0 0;padding:20px 16px 32px;max-height:72vh;display:flex;flex-direction:column;transform:translateY(100%);transition:transform .3s cubic-bezier(.32,1.2,.36,1);}
+.pal-sheet.on{transform:translateY(0);}
+.pal-drag{width:40px;height:4px;background:rgba(255,255,255,.2);border-radius:99px;margin:0 auto 16px;}
+.pal-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
+.pal-title{font-family:'Poppins',sans-serif;font-weight:700;color:#fff;font-size:1rem;}
+.pal-close{background:rgba(255,255,255,.1);border:none;color:#fff;width:30px;height:30px;border-radius:50%;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;}
+.pal-legend{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:14px;}
+.pal-leg{display:flex;align-items:center;gap:5px;font-size:.72rem;color:rgba(255,255,255,.6);}
+.pal-leg-dot{width:12px;height:12px;border-radius:3px;flex-shrink:0;}
+.ld-unans{background:rgba(255,255,255,.15);}
+.ld-cor{background:#2E9B5A;}
+.ld-wrg{background:#C0392B;}
+.ld-skp{background:#E8881A;}
+.ld-cur{background:#3B82F6;}
+.pal-grid{display:grid;grid-template-columns:repeat(8,1fr);gap:8px;overflow-y:auto;flex:1;}
+@media(min-width:400px){.pal-grid{grid-template-columns:repeat(10,1fr);}}
+.pbub{width:100%;aspect-ratio:1;border-radius:8px;border:none;font-family:'Poppins',sans-serif;font-weight:700;font-size:.75rem;cursor:pointer;transition:transform .12s,box-shadow .12s;color:#fff;}
+.pbub:hover{transform:scale(1.15);box-shadow:0 4px 14px rgba(0,0,0,.4);}
+.pbub.pb-unans{background:rgba(255,255,255,.12);color:rgba(255,255,255,.6);}
+.pbub.pb-cor{background:#2E9B5A;}
+.pbub.pb-wrg{background:#C0392B;}
+.pbub.pb-skp{background:#E8881A;}
+.pbub.pb-cur{background:#3B82F6;box-shadow:0 0 0 2px rgba(59,130,246,.6);}
+.pal-btn{background:rgba(255,255,255,.08);border:1.5px solid rgba(255,255,255,.2);color:rgba(255,255,255,.85);padding:6px 12px;border-radius:10px;font-family:'Poppins',sans-serif;font-weight:600;font-size:.78rem;cursor:pointer;transition:all .15s;white-space:nowrap;}
+.pal-btn:hover{background:rgba(255,255,255,.16);color:#fff;}
+
+.submit-btn{background:linear-gradient(135deg,#1A6B3C,#2E9B5A);color:#fff;border:none;padding:16px;border-radius:16px;font-family:'Poppins',sans-serif;font-weight:700;font-size:1.05rem;cursor:pointer;width:100%;box-shadow:0 6px 24px rgba(46,155,90,.45);transition:all .18s;display:flex;align-items:center;justify-content:center;gap:10px;animation:nxtIn .3s ease;}.submit-btn:hover{transform:translateY(-3px);box-shadow:0 10px 32px rgba(46,155,90,.55);}
+.prev-btn{background:rgba(255,255,255,.07);border:1.5px solid rgba(255,255,255,.18);color:rgba(255,255,255,.7);padding:10px 16px;border-radius:12px;font-family:'Poppins',sans-serif;font-weight:600;font-size:.85rem;cursor:pointer;width:100%;transition:all .15s;display:flex;align-items:center;gap:6px;justify-content:center;}.prev-btn:hover{background:rgba(255,255,255,.14);color:#fff;border-color:rgba(255,255,255,.35);transform:translateX(-3px);}
 </style>
 </head>
 <body>
@@ -313,6 +346,7 @@ h1,h2,h3,.pp{font-family:'Poppins',sans-serif;}
       <button class="bk" onclick="exitQuiz('ch')" style="background:rgba(255,255,255,.1);">✕ Exit</button>
       <div class="qtitle" id="q-title">Chapter</div>
       <div class="lv-pill pl-bas" id="lv-pill">Basic</div>
+      <button class="pal-btn" onclick="openPalette('ch')">📋</button>
       <div class="sc-pill" id="sc-pill">Score: 0</div>
     </div>
     <div class="qprog-wrap">
@@ -331,28 +365,46 @@ h1,h2,h3,.pp{font-family:'Poppins',sans-serif;}
     <div class="pyq-body">
       <div class="sec-lbl">Select Year</div>
       <div class="yr-grid">
-        <div class="yr-btn" id="yr-2023" onclick="selectYear(2023)"><div class="yr-badge">Latest</div><div class="yr-num">2023</div><div class="yr-sub">NEET UG</div></div>
-        <div class="yr-btn" id="yr-2022" onclick="selectYear(2022)"><div class="yr-num">2022</div><div class="yr-sub">NEET UG</div></div>
-        <div class="yr-btn" id="yr-2021" onclick="selectYear(2021)"><div class="yr-num">2021</div><div class="yr-sub">NEET UG</div></div>
-        <div class="yr-btn" id="yr-2020" onclick="selectYear(2020)"><div class="yr-num">2020</div><div class="yr-sub">NEET UG</div></div>
-        <div class="yr-btn" id="yr-2019" onclick="selectYear(2019)"><div class="yr-num">2019</div><div class="yr-sub">NEET UG</div></div>
-      </div>
-      <div class="sec-lbl">Subject Filter</div>
-      <div class="sf-row">
-        <button class="sf-btn sf-all" id="sf-all"  onclick="selectSF('all')">🔬 All</button>
-        <button class="sf-btn" id="sf-physics"     onclick="selectSF('physics')">⚛️ Physics</button>
-        <button class="sf-btn" id="sf-biology"     onclick="selectSF('biology')">🧬 Biology</button>
-        <button class="sf-btn" id="sf-chemistry"   onclick="selectSF('chemistry')">🧪 Chemistry</button>
+        <div class="yr-btn" id="yr-2025" onclick="selectYear(2025)">
+          <div class="yr-badge">Live ✅</div>
+          <div class="yr-num">2025</div>
+          <div class="yr-sub">🧬 Biology · 90 Qs</div>
+        </div>
+        <div class="yr-btn yr-soon" id="yr-2024" style="opacity:.45;cursor:not-allowed;">
+          <div class="yr-num" style="color:#aaa;">2024</div>
+          <div class="yr-sub" style="color:#bbb;">Coming soon</div>
+        </div>
+        <div class="yr-btn yr-soon" id="yr-2023" style="opacity:.45;cursor:not-allowed;">
+          <div class="yr-num" style="color:#aaa;">2023</div>
+          <div class="yr-sub" style="color:#bbb;">Coming soon</div>
+        </div>
+        <div class="yr-btn yr-soon" id="yr-2022" style="opacity:.45;cursor:not-allowed;">
+          <div class="yr-num" style="color:#aaa;">2022</div>
+          <div class="yr-sub" style="color:#bbb;">Coming soon</div>
+        </div>
+        <div class="yr-btn yr-soon" id="yr-2021" style="opacity:.45;cursor:not-allowed;">
+          <div class="yr-num" style="color:#aaa;">2021</div>
+          <div class="yr-sub" style="color:#bbb;">Coming soon</div>
+        </div>
+        <div class="yr-btn yr-soon" id="yr-2020" style="opacity:.45;cursor:not-allowed;">
+          <div class="yr-num" style="color:#aaa;">2020</div>
+          <div class="yr-sub" style="color:#bbb;">Coming soon</div>
+        </div>
+        <div class="yr-btn yr-soon" id="yr-2019" style="opacity:.45;cursor:not-allowed;">
+          <div class="yr-num" style="color:#aaa;">2019</div>
+          <div class="yr-sub" style="color:#bbb;">Coming soon</div>
+        </div>
       </div>
       <div class="info-box">
         <div class="info-title">📋 How Attempt Mode Works</div>
         <ul class="info-list">
-          <li>Countdown timer — scaled to question count</li>
-          <li>Tap an option to answer; skip with no penalty</li>
-          <li>Step-by-step solution revealed immediately after each answer</li>
-          <li>Next question auto-advances after 5 s (or tap Next to skip wait)</li>
-          <li>NEET marking: +4 correct, −1 wrong, 0 skipped</li>
-          <li>All attempts saved to Supabase leaderboard</li>
+          <li>Select a year above, then tap <strong>Start Attempt</strong></li>
+          <li>NEET 2025 Biology — 90 real questions with step-by-step solutions</li>
+          <li>Countdown timer scales to number of questions (2 min / question)</li>
+          <li>Tap an option to lock your answer — skip anytime (no penalty)</li>
+          <li>Solution revealed instantly; auto-advances to next Q after 5 s</li>
+          <li>NEET marking: +4 correct · −1 wrong · 0 skipped</li>
+          <li>Score saved to Supabase leaderboard after every attempt</li>
         </ul>
       </div>
       <button class="pyq-go" id="pyq-go" onclick="startPYQ()" disabled>📜 Start Attempt →</button>
@@ -365,6 +417,7 @@ h1,h2,h3,.pp{font-family:'Poppins',sans-serif;}
       <button class="bk" onclick="exitQuiz('pyq')" style="background:rgba(255,255,255,.1);">✕ Exit</button>
       <div class="qtitle" id="pyq-title">NEET 2023</div>
       <div class="timer" id="pyq-timer">45:00</div>
+      <button class="pal-btn" onclick="openPalette('pyq')">📋</button>
       <div class="sc-pill" id="pyq-sc">0</div>
     </div>
     <div style="background:#081515;padding:8px 16px 12px;">
@@ -774,6 +827,7 @@ function renderChQ(){
   const pct=(cQi/cQs.length)*100;
   document.getElementById('q-prog').style.width=pct+'%';
   document.getElementById('q-ctr').textContent=`Q ${cQi+1} / ${cQs.length}`;
+  const canGoBack=cQi>0 && cAnswers[cQi-1]===null;
   document.getElementById('q-content').innerHTML=`
     <div class="qcard">
       <div class="qnum">QUESTION ${cQi+1}</div>
@@ -782,7 +836,12 @@ function renderChQ(){
     <div class="opts" id="opts">
       ${q.opts.map((o,i)=>`<button class="opt" id="o${i}" onclick="pickCh(${i})"><div class="ol">${L[i]}</div><div class="ot">${o}</div></button>`).join('')}
     </div>
+    ${canGoBack?`<button class="prev-btn" onclick="prevCh()">← Previous Question</button>`:''}
     <div id="fb"></div>`;
+}
+
+function prevCh(){
+  if(cQi>0 && cAnswers[cQi-1]===null){cQi--;renderChQ();}
 }
 
 function pickCh(sel){
@@ -804,8 +863,11 @@ function pickCh(sel){
       <div class="expl-tx">${q.expl}</div>
       ${buildSteps(q.steps,false)}
     </div>
-    ${buildAA('nextCh()')}`;
-  startAA(()=>nextCh());
+    ${cQi===cQs.length-1
+      ? `<button class="submit-btn" onclick="showChResults()">✅ Submit Quiz →</button>`
+      : buildAA('nextCh()')}`;
+  if(cQi<cQs.length-1) startAA(()=>nextCh());
+  refreshPaletteIfOpen();
 }
 
 function nextCh(){
@@ -838,28 +900,21 @@ async function showChResults(){
    PYQ SECTION
 ═══════════════════════════════════════════ */
 function openPYQ(){
-  pyqYear=null; pyqSF='all';
+  pyqYear=null;
   document.querySelectorAll('.yr-btn').forEach(b=>b.classList.remove('sel'));
-  setSF('all');
   document.getElementById('pyq-go').disabled=true;
+  document.getElementById('pyq-go').textContent='📜 Start Attempt →';
   showScr('pyq');
 }
 
 function selectYear(y){
+  // Only 2025 has data in Supabase currently
+  const available=[2025];
+  if(!available.includes(y)){showToast('Coming soon — only 2025 is available now','err');return;}
   pyqYear=y;
   document.querySelectorAll('.yr-btn').forEach(b=>b.classList.remove('sel'));
   document.getElementById('yr-'+y).classList.add('sel');
   document.getElementById('pyq-go').disabled=false;
-}
-
-function selectSF(sub){
-  pyqSF=sub; setSF(sub);
-}
-
-function setSF(sub){
-  const map={all:'sf-all',physics:'sf-phy',biology:'sf-bio',chemistry:'sf-che'};
-  ['sf-all','sf-physics','sf-biology','sf-chemistry'].forEach(id=>document.getElementById(id).className='sf-btn');
-  document.getElementById('sf-'+sub).classList.add(map[sub]);
 }
 
 async function startPYQ(){
@@ -867,16 +922,13 @@ async function startPYQ(){
   const btn=document.getElementById('pyq-go');
   btn.disabled=true; btn.textContent='Loading…';
   document.getElementById('load-tx').textContent=`Loading NEET ${pyqYear} PYQs…`;
-  document.getElementById('load-sub').textContent=pyqSF==='all'?'All Subjects':pyqSF.charAt(0).toUpperCase()+pyqSF.slice(1);
+  document.getElementById('load-sub').textContent='🧬 Biology · 90 Questions';
   showScr('loading');
 
   let qs=await fetchPYQs(pyqYear,pyqSF);
   if(!qs||qs.length===0){
-    const subs=pyqSF==='all'?['physics','biology','chemistry']:[pyqSF];
-    const combined=[];
-    subs.forEach(s=>shuffle([...FB[s]]).slice(0,Math.ceil(9/subs.length)).forEach(q=>combined.push({...q,subject:s,pyq_year:pyqYear,chapter:'General'})));
-    qs=shuffle(combined);
-    showToast('💡 Sample PYQs — add real ones in Supabase!','ok');
+    qs=shuffle([...FB.biology]).map(q=>({...q,subject:'biology',pyq_year:pyqYear,chapter:''}));
+    showToast('💡 Sample questions shown — upload real PYQs to Supabase!','ok');
   }
 
   pQs=qs; pQi=0; pScore=0; pCor=0; pWrg=0;
@@ -893,11 +945,22 @@ async function startPYQ(){
 
 async function fetchPYQs(year,sub){
   try{
-    let q=`?pyq_year=eq.${year}&select=id,q,opts,ans,expl,steps,subject,chapter&limit=100`;
-    if(sub!=='all') q+=`&subject=eq.${sub}`;
-    const data=await sbGet('pyq_questions',q);
-    return shuffle(data).slice(0,Math.min(40,data.length));
-  }catch(e){console.warn('PYQ DB:',e.message);return null;}
+    // pyq_questions table columns: id, q, opts, ans, expl, steps, created_at
+    // opts and steps are text[] — PostgREST returns them as JSON arrays
+    const data=await sbGet('pyq_questions','?select=id,q,opts,ans,expl,steps&order=id&limit=200');
+    if(!data||data.length===0)return null;
+    // Normalise: ensure opts and steps are always JS arrays
+    const normalised=data.map(row=>({
+      ...row,
+      opts:  Array.isArray(row.opts)  ? row.opts  : (typeof row.opts==='string'  ? JSON.parse(row.opts)  : []),
+      steps: Array.isArray(row.steps) ? row.steps : (typeof row.steps==='string' ? JSON.parse(row.steps) : []),
+      ans:   Number(row.ans),
+      subject:'biology',
+      chapter:'',
+      pyq_year:year
+    }));
+    return shuffle(normalised);
+  }catch(e){console.warn('PYQ DB fetch error:',e.message);return null;}
 }
 
 /* ── PYQ Timer ── */
@@ -921,16 +984,22 @@ function stopPYQ(){clearInterval(pTimerInt);pTimerInt=null;}
 function renderPYQQ(){
   clearAA();
   const q=pQs[pQi], L=['A','B','C','D'];
+  const isLast=pQi===pQs.length-1;
   const pct=(pQi/pQs.length)*100;
   document.getElementById('pyq-prog').style.width=pct+'%';
   document.getElementById('pyq-ctr').textContent=`Q ${pQi+1} / ${pQs.length}`;
+  // Hide timer on last question
+  const timerEl=document.getElementById('pyq-timer');
+  if(timerEl) timerEl.style.display=isLast?'none':'';
 
   const stMap={physics:'st-phy',biology:'st-bio',chemistry:'st-che'};
   const siMap={physics:'⚛️ Physics',biology:'🧬 Biology',chemistry:'🧪 Chemistry'};
+  const subKey=q.subject||'biology';
   const stEl=document.getElementById('pyq-sub-tag');
-  stEl.className='sub-tag '+(stMap[q.subject]||'st-bio');
-  stEl.textContent=siMap[q.subject]||q.subject;
+  stEl.className='sub-tag '+(stMap[subKey]||'st-bio');
+  stEl.textContent=siMap[subKey]||'🧬 Biology';
 
+  const canGoBackPYQ=pQi>0 && pAnswers[pQi-1]===null;
   document.getElementById('pyq-content').innerHTML=`
     <div class="qcard pyq">
       <div class="qnum tl">NEET ${q.pyq_year||pyqYear} · Q${pQi+1}
@@ -941,8 +1010,20 @@ function renderPYQQ(){
     <div class="opts" id="pyq-opts">
       ${q.opts.map((o,i)=>`<button class="opt" id="po${i}" onclick="pickPYQ(${i})"><div class="ol">${L[i]}</div><div class="ot">${o}</div></button>`).join('')}
     </div>
-    <button class="skip-btn" id="skip-btn" onclick="skipPYQ()">⏭ Skip (no penalty)</button>
+    ${isLast ? `
+    <div style="display:flex;gap:10px;">
+      ${canGoBackPYQ?`<button class="prev-btn" style="flex:1" onclick="prevPYQ()">← Previous</button>`:''}
+      <button class="submit-btn" id="skip-btn" style="${canGoBackPYQ?'flex:2':''}" onclick="submitPYQ()">🏁 Submit &amp; See Results →</button>
+    </div>` : `
+    <div style="display:flex;gap:10px;">
+      ${canGoBackPYQ?`<button class="prev-btn" style="flex:1" onclick="prevPYQ()">← Previous</button>`:''}
+      <button class="skip-btn" id="skip-btn" style="${canGoBackPYQ?'flex:2':''}" onclick="skipPYQ()">⏭ Skip (no penalty)</button>
+    </div>`}
     <div id="pyq-fb"></div>`;
+}
+
+function prevPYQ(){
+  if(pQi>0 && pAnswers[pQi-1]===null){pQi--;renderPYQQ();}
 }
 
 function pickPYQ(sel){
@@ -963,8 +1044,11 @@ function pickPYQ(sel){
       <div class="expl-tx">${q.expl}</div>
       ${buildSteps(q.steps,true)}
     </div>
-    ${buildAA('nextPYQ()')}`;
-  startAA(()=>nextPYQ());
+    ${pQi===pQs.length-1
+      ? `<button class="submit-btn" onclick="showPYQResults()">🏁 Submit &amp; See Results →</button>`
+      : buildAA('nextPYQ()')}`;
+  if(pQi<pQs.length-1) startAA(()=>nextPYQ());
+  refreshPaletteIfOpen();
 }
 
 function skipPYQ(){
@@ -972,10 +1056,19 @@ function skipPYQ(){
   const sb=document.getElementById('skip-btn');if(sb)sb.style.display='none';
   document.getElementById('pyq-fb').innerHTML=`
     <div class="fb skp">⏭ Skipped — no penalty</div>
-    ${buildAA('nextPYQ()',2000)}`;
-  startAA(()=>nextPYQ(),2000);
+    ${pQi===pQs.length-1
+      ? `<button class="submit-btn" onclick="showPYQResults()">🏁 Submit &amp; See Results →</button>`
+      : buildAA('nextPYQ()',2000)}`;
+  if(pQi<pQs.length-1) startAA(()=>nextPYQ(),2000);
+  refreshPaletteIfOpen();
 }
 
+
+function submitPYQ(){
+  // If user hits Submit without answering the last question, count it as skipped
+  // pAnswers[pQi] is already null (skipped) or set (answered) — just go to results
+  stopPYQ(); showPYQResults();
+}
 function nextPYQ(){
   if(pQi<pQs.length-1){pQi++;renderPYQQ();}else{stopPYQ();showPYQResults();}
 }
@@ -994,7 +1087,7 @@ async function showPYQResults(){
   showScr('results');
   document.getElementById('save-st').textContent='💾 Saving PYQ result…';
   try{
-    await sbPost('progress',{user_id:userId,subject:'pyq',chapter:`NEET ${pyqYear}`,level:pyqSF,correct:pCor,wrong:pWrg,skipped:skp,neet_score:pScore});
+    await sbPost('progress',{user_id:userId,subject:'pyq',chapter:`NEET ${pyqYear}`,level:'pyq',correct:pCor,wrong:pWrg,skipped:skp,neet_score:pScore});
     await updateLB(pScore,pCor);
     document.getElementById('save-st').textContent='✅ Saved!';
   }catch(e){document.getElementById('save-st').textContent='⚠️ Not saved (offline?)';}
@@ -1019,6 +1112,156 @@ function fillResults(cor,wrg,skp,tot,ns,max,pct,title){
   const step=Math.ceil(Math.abs(ns)/40)||1;
   const iv=setInterval(()=>{if(Math.abs(cur-ns)<=step){cur=ns;clearInterval(iv);}else cur+=(ns>0?step:-step);el.textContent=cur;},28);
   setTimeout(()=>{document.getElementById('score-arc').style.strokeDashoffset=502*(1-Math.max(pct,0)/100);},100);
+}
+
+
+/* ═══════════════════════════════════════════
+   QUESTION PALETTE
+═══════════════════════════════════════════ */
+let palMode=null; // 'ch' or 'pyq'
+
+function openPalette(mode){
+  palMode=mode;
+  const qs   = mode==='ch'  ? cQs      : pQs;
+  const ans  = mode==='ch'  ? cAnswers : pAnswers;
+  const qi   = mode==='ch'  ? cQi      : pQi;
+  document.getElementById('pal-title').textContent=
+    mode==='ch' ? `Questions · ${qs.length} total` : `NEET ${pyqYear} · ${qs.length} Qs`;
+  renderPaletteGrid(qs, ans, qi);
+  document.getElementById('pal-overlay').classList.add('on');
+  document.getElementById('pal-sheet').classList.add('on');
+}
+
+function closePalette(){
+  document.getElementById('pal-overlay').classList.remove('on');
+  document.getElementById('pal-sheet').classList.remove('on');
+}
+
+function renderPaletteGrid(qs, ans, qi){
+  const grid = document.getElementById('pal-grid');
+  grid.innerHTML = qs.map((q,i)=>{
+    let cls='pb-unans';
+    if(i===qi)            cls='pb-cur';
+    else if(ans[i]===null && i<qi) cls='pb-skp';  // visited & skipped
+    else if(ans[i]!==null && ans[i]===q.ans) cls='pb-cor';
+    else if(ans[i]!==null && ans[i]!==q.ans) cls='pb-wrg';
+    // unanswered & not yet visited stays pb-unans
+    return `<button class="pbub ${cls}" onclick="jumpToQ(${i})" title="Q${i+1}">${i+1}</button>`;
+  }).join('');
+}
+
+function jumpToQ(i){
+  closePalette();
+  if(palMode==='ch'){
+    const ans=cAnswers[i];
+    cQi=i;
+    if(ans===null){
+      // Unanswered or skipped — render fresh so user can answer
+      renderChQ();
+    } else {
+      // Already answered — show read-only view with explanation
+      renderChQAnswered(i);
+    }
+  } else {
+    const ans=pAnswers[i];
+    pQi=i;
+    if(ans===null){
+      renderPYQQ();
+    } else {
+      renderPYQQAnswered(i);
+    }
+  }
+}
+
+function renderChQAnswered(i){
+  clearAA();
+  const q=cQs[i], L=['A','B','C','D'], ans=cAnswers[i];
+  const pct=(i/cQs.length)*100;
+  document.getElementById('q-prog').style.width=pct+'%';
+  document.getElementById('q-ctr').textContent=`Q ${i+1} / ${cQs.length}`;
+  document.getElementById('q-content').innerHTML=`
+    <div class="qcard">
+      <div class="qnum">QUESTION ${i+1} <span style="font-size:.7rem;opacity:.6">(answered)</span></div>
+      <div class="qtext">${q.q}</div>
+    </div>
+    <div class="opts">
+      ${q.opts.map((o,oi)=>{
+        let cls=''; let lbl=L[oi];
+        if(oi===ans && ans===q.ans){cls='cor';lbl='✓';}
+        else if(oi===ans && ans!==q.ans){cls='wrg';lbl='✗';}
+        else if(oi===q.ans && ans!==q.ans){cls='rev';lbl='✓';}
+        return `<button class="opt ${cls}" disabled><div class="ol">${lbl}</div><div class="ot">${o}</div></button>`;
+      }).join('')}
+    </div>
+    <div class="expl-box" style="margin-top:4px;">
+      <div class="expl-lbl">📘 Explanation</div>
+      <div class="expl-tx">${q.expl}</div>
+      ${buildSteps(q.steps,false)}
+    </div>
+    ${i===cQs.length-1
+      ? `<button class="submit-btn" style="margin-top:8px;" onclick="showChResults()">✅ Submit Quiz →</button>`
+      : `<button class="next-btn" style="margin-top:8px;" onclick="continueFromAnswered('ch',${i})">Continue →</button>`}`;
+}
+
+function renderPYQQAnswered(i){
+  clearAA();
+  const q=pQs[i], L=['A','B','C','D'], ans=pAnswers[i];
+  const pct=(i/pQs.length)*100;
+  document.getElementById('pyq-prog').style.width=pct+'%';
+  document.getElementById('pyq-ctr').textContent=`Q ${i+1} / ${pQs.length}`;
+  document.getElementById('pyq-content').innerHTML=`
+    <div class="qcard pyq">
+      <div class="qnum tl">NEET ${q.pyq_year||pyqYear} · Q${i+1} <span style="font-size:.7rem;opacity:.6">(answered)</span></div>
+      <div class="qtext">${q.q}</div>
+    </div>
+    <div class="opts">
+      ${q.opts.map((o,oi)=>{
+        let cls=''; let lbl=L[oi];
+        if(oi===ans && ans===q.ans){cls='cor';lbl='✓';}
+        else if(oi===ans && ans!==q.ans){cls='wrg';lbl='✗';}
+        else if(oi===q.ans && ans!==q.ans){cls='rev';lbl='✓';}
+        return `<button class="opt ${cls}" disabled><div class="ol">${lbl}</div><div class="ot">${o}</div></button>`;
+      }).join('')}
+    </div>
+    <div class="expl-box tl" style="margin-top:4px;">
+      <div class="expl-lbl tl">📘 Step-by-Step Solution</div>
+      <div class="expl-tx">${q.expl}</div>
+      ${buildSteps(q.steps,true)}
+    </div>
+    ${i===pQs.length-1
+      ? `<button class="submit-btn" style="margin-top:8px;" onclick="showPYQResults()">🏁 Submit &amp; See Results →</button>`
+      : `<button class="next-btn" style="margin-top:8px;" onclick="continueFromAnswered('pyq',${i})">Continue →</button>`}`;
+}
+
+function continueFromAnswered(mode,fromIdx){
+  // Find the next unanswered question after fromIdx, else go to results
+  if(mode==='ch'){
+    const next=cAnswers.findIndex((a,i)=>i>fromIdx && a===null);
+    if(next!==-1){cQi=next;renderChQ();}
+    else{
+      const anyLeft=cAnswers.findIndex((a,i)=>a===null && i<=fromIdx);
+      if(anyLeft!==-1){cQi=anyLeft;renderChQ();}
+      else showChResults();
+    }
+  } else {
+    const next=pAnswers.findIndex((a,i)=>i>fromIdx && a===null);
+    if(next!==-1){pQi=next;renderPYQQ();}
+    else{
+      const anyLeft=pAnswers.findIndex((a,i)=>a===null && i<=fromIdx);
+      if(anyLeft!==-1){pQi=anyLeft;renderPYQQ();}
+      else{stopPYQ();showPYQResults();}
+    }
+  }
+}
+
+/* update palette live whenever an answer is recorded */
+function refreshPaletteIfOpen(){
+  const sheet=document.getElementById('pal-sheet');
+  if(!sheet.classList.contains('on'))return;
+  const qs  = palMode==='ch' ? cQs      : pQs;
+  const ans = palMode==='ch' ? cAnswers : pAnswers;
+  const qi  = palMode==='ch' ? cQi      : pQi;
+  renderPaletteGrid(qs,ans,qi);
 }
 
 /* ═══════════════════════════════════════════
@@ -1186,5 +1429,24 @@ function showToast(msg,type='ok'){
   setTimeout(()=>t.classList.remove('on'),3000);
 }
 </script>
+
+  <!-- QUESTION PALETTE (shared) -->
+  <div class="pal-overlay" id="pal-overlay" onclick="closePalette()"></div>
+  <div class="pal-sheet" id="pal-sheet">
+    <div class="pal-drag"></div>
+    <div class="pal-hdr">
+      <div class="pal-title" id="pal-title">Questions</div>
+      <button class="pal-close" onclick="closePalette()">✕</button>
+    </div>
+    <div class="pal-legend">
+      <div class="pal-leg"><div class="pal-leg-dot ld-unans"></div>Unanswered</div>
+      <div class="pal-leg"><div class="pal-leg-dot ld-cor"></div>Correct</div>
+      <div class="pal-leg"><div class="pal-leg-dot ld-wrg"></div>Wrong</div>
+      <div class="pal-leg"><div class="pal-leg-dot ld-skp"></div>Skipped</div>
+      <div class="pal-leg"><div class="pal-leg-dot ld-cur"></div>Current</div>
+    </div>
+    <div class="pal-grid" id="pal-grid"></div>
+  </div>
+
 </body>
 </html>
